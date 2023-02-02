@@ -5800,7 +5800,70 @@ Stream流的收集方法
 
 
 
-## 类加载器：
+## 单元测试：
+
+* 单元测试就是针对最小的功能单元编写测试代码，ava程序最小的功能单元是方法，因此，单元测试就是针对Java方法的测试，进而检查方法的正确性。
+
+* 目前测试方法是怎么进行的，存在什么问题
+  * 只有一个main方法，如果一个方法的测试失败了，其他方法测试会受到影响
+  * 无法得到测试的结果报告，需要程序员自己去观察测试是否成功。
+  * 无法实现自动化测试。
+
+
+
+### Junit单元测试框架
+
+* JUnit是使用ava语言实现的单元测试框架，它是开源的，lava开发者都应当学习并使用]Unit编写单元测试。
+
+* 此外，几平所有的IDE工具都集成了IUnt，这样我们就可以直接在IDE中编写并运行IUnt测试
+
+  
+
+* #### JUnit优点
+
+  * JUnit可以灵活的选择执行哪些测试方法，可以一键执行全部测试方法。
+  * unit可以生成全部方法的测试报告
+  * 单元测试中的某个方法测试失败了，不会影响其他测试方法的测试
+
+
+
+总结：
+
+* 1.Junit单元测试是做什么的?
+  测试类中方法的正确性的
+* 2.Junit单元测试的优点是什么?
+  * JUnit可以选择执行哪些测试方法，可以一键执行全部测试方法的测试
+  * JUnit可以生测试报告，如果测试良好则是绿色;如果测试失败，则是红色
+  * 单元测试中的某个方法测试失败了，不会影响其他测试方法的测试
+
+* 3.JUnit单元测试的实现过程是什么样的？
+  * 必须导入Junit框架的jar包
+  * 定义的测试方法必须是无参无返回值，且公开的方法
+  * 测试方法使用@Test注解标记
+* 4.Junit测试某个方法，测试全部方法怎么处理？成功的标志是什么
+  * 测试某个方法直接右键该方法启动测试
+  * 测试全部方法，可以选择类或者模块启动
+  * 红色失败，绿色通过
+
+
+
+### 单元测试常用注解：（JUnit 4）
+
+**@Test				 				测试方法**
+**@Before							用来修饰实例方法，该方法会在每一个测试方法执行之前执行一次**
+**@After			  				 用来修饰实例方法，该方法会在每一个测试方法执行之后执行一次**
+**@BeforeClass		 		 用来静态修饰方法，该方法会在所有测试方法之前只执行一次**
+**@AfterClass					 用来静态修饰方法，该方法会在所有测试方法之后只执行一次**
+
+开始执行的方法：初始化资源
+
+执行完之后的方法：释放资源
+
+
+
+
+
+## 1 类加载器：
 
 ### 1.1 类加载：
 
@@ -5846,3 +5909,534 @@ Stream流的收集方法
 * 初始化某个类的子类  （因为初始化子类首先要初始化父类）
 * 直接使用java.exe命令来运行整个主类
 
+
+
+### 1.2 类加载器
+
+类加载器的作用：
+
+* 负责将.class文件加载到内存中，并为之生成对应的java.lang.Class对象
+
+
+
+JVM的类加载机制：
+
+* 全盘负责：就是当一个类加载器负责加载某个Class时，该Class所依赖的和引用的其他Class也将由该类加载器负责载入，除非显示使用另外一个类加载器来载入
+* 父类委托：就是当一个类加载器负责加载某个Class时，先让父类加载器试图加载该Class，只有在父类加载器无法加载该类时才尝试从自己的类路径中加载该类
+* 缓存机制：保证所有加载过的Class都会被缓存，当程序需要使用某个Class对象时，类加载器先从缓存区中搜索该Class，只有当缓存区中不存在该Class对象时，系统才会读取该类对应的二进制数据，并将其转换成Class对象，存储到缓存区
+
+
+
+ClassLoader：是负责加载类的对象
+
+Java运行时具有以下内置类加载器
+
+* Bootstrap classloader: 它是虚拟机的内置类加载器，通常表示为null，并目没有父null
+
+* Platform classloader: 平台类加载器可以看到所有平台类，平台类包括由平台类加载器或其祖先定义的Java SE平台API其实现类和JDK特定的运行时类
+
+* System classloader:它也被称为应用程序类加载器，与平台类加载器不同。系统类加载器通常用于定义应用程序类路径模块路径和JDK特定工具上的类
+
+* 类加载器的继承关系: System的父加载器为Platform，而Platform的父加载器为Bootstrap
+
+  
+
+  ClassLoader中的两个方法
+
+  * static ClassLoadergetSystemClassLoader()：返回用于委派的系统类加载器
+
+  * ClassLoadergetParent()：返回父类加载器进行委派
+
+代码演示：
+
+```java
+public static void main(String[] args){
+    //static ClassLoadergetSystemClassLoader()：返回用于委派的系统类加载器
+    ClassLoader c = ClassLoader.getSystemClassLoader();
+    System.out.println(c);  //AppClassLoader
+
+    //ClassLoadergetParent()：返回父类加载器进行委派
+    ClassLoader c2 = c.getParent();
+    System.out.println(c2); //PlatformClassLoader
+
+    ClassLoader c3 = c2.getParent();
+    System.out.println(c3); //null
+}
+```
+
+
+
+## 2 反射：
+
+### 2.1 反射概述：
+
+![image-20230202151708487](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230202151708487.png)
+
+
+
+java反射机制：是指在运行时去获取一个类的变量和方法信息。然后通过获取到的信息来创建对象，调用方法的一种机制。由于这种动态性，可以极大的增强程序的灵活性，程序不用在编译期就完成确定，在运行期仍然可以扩展
+
+
+
+### 2.2 获取Class类的对象：
+
+我们要想通过反射去使用一个类，首先我们要获取到该类的字节码文件对象，也就是类型为Class类型的对象
+
+这里我们提供三种方式去获取Class类型的对象
+
+* 使用类的class属性来获取该类对应的Class对象。举例：Student.class将会返回Student类对应的Class对象
+
+* 调用对象的getClass()方法，返回该对象所属类对应的Class对象
+
+  ​	该方法是Object类中的方法，所有java对象都可以调用该方法
+
+* 使用Class类中的静态方法forName(String className),该方法需要传入字符串参数，该字符串参数的值是某个类的全路径，也就是完整包名的路径
+
+```java
+public static void main(String[] args) throws ClassNotFoundException {
+    //使用类的class属性来获取该类对应的Class对象
+    Class<Student> c1 = Student.class;
+    System.out.println(c1);
+
+    Class<Student> c2 = Student.class;
+    System.out.println(c1 == c2);
+    System.out.println("----------------------");
+
+    //调用对象的getClass()方法，返回该对象所属类对应的class对象
+    Student s = new Student();
+    Class<?extends Student> c3 = s.getClass();
+    System.out.println(c1 == c3);
+    System.out.println("---------------");
+
+    //使用Class类中静态方法forName(String className)
+    Class<?> c4 = Class.forName("code.Reflect.Student");
+    System.out.println(c1 == c4);
+}
+```
+
+
+
+### 2.3 反射获取构造方法并使用
+
+Class类中用于获取构造方法的方法：
+
+* Constructor<?>[] getConstructors()：返回所有公共构造方法对象的数组
+* Constructor<?>[] getDeclaredConstructors()：返回所有构造方法对象的数组
+* Constructor<T> getConstructor(Class<?>...parmeterTypes)：返回单个公共构造方法对象
+* Constructor<T> getDeclaredConstructor(Class<?>...parameterTypes)：返回单个构造方法对象
+
+
+
+Constructor类中用云创建对象的方法
+
+* T newInstance(Object...initargs)：根据指定的构造方法创建对象
+
+
+
+代码演示：
+
+```java
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        //获取Class对象
+        Class<?> c = Class.forName("code.Reflect.Student");
+
+        //Constructor<?>[] getConstructors()返回一个包含ConStructor对象的数组
+        // Constructor对象反映了由该Class对象表示的类的所有公共构造函数
+//        Constructor<?>[] cons = c.getConstructors();
+
+        //Constructor<?>[] getDeclaredConstructors()返回反映由该class对象表示的类声明的所有构造函数的Constructor对象的数组
+        Constructor<?>[] cons = c.getDeclaredConstructors();
+        for (Constructor con : cons){
+            System.out.println(con);
+        }
+        System.out.println("-------------------");
+
+        //Constructor<T> getConstructor(Class<?>...parameterTypes) 返回一个Constructor对象，该对象反映由该Class对象表示的类的指定公共构造函数
+        //Constructor<T> getDeclaredConstructor(Class<?>...parameterTypes) 返回一个Constructor对象，该对象反映由该Class对象表示的类或接口的指定构造函数
+        //参数:你要获取的构造方法的参数的个数和数据类型对应的字节码文件对象
+
+        Constructor<?> con = c.getConstructor();
+
+        //Constructor提供了一个类的单个构造函数的信息和访问权限
+        //T newInstance(Object... initargs) 使用由此Constructor对象表示的构造函数，使用指定的初始化参数来创建和初始化构造函数的声明类的新实例
+        Object obj = con.newInstance();
+        System.out.println(obj);
+
+//        Student s = new Student();
+//        System.out.println(s);
+    }
+```
+
+
+
+练习1：通过反射实现如下操作
+
+* Student s = new Student("林青霞",30,"西安");
+* System.out.println(s);
+
+* 基本数据类型也可以通过.class得到对应的Class类型
+
+代码演示：
+
+```java
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        //获取Class对象
+        Class<?> c = Class.forName("code.Reflect.Student");
+
+        //Constructor<T> getConstructor(Class<?>...parmeterTypes)
+        Constructor<?> con = c.getConstructor(String.class,int.class,String.class);
+        //基本数据类型也可以通过.class得到对应的Class类型
+
+        Object obj = con.newInstance("林青霞",30,"西安");
+        System.out.println(obj);
+    }
+```
+
+
+
+练习2：通过反射实现如下操作
+
+* Student s = new Student("林青霞");
+* System.out.println(s);
+* **public void setAccessible (boolean flag):值为true，取消访问检查**
+
+代码演示：
+
+```java
+public static void main(String[] args) throws InvocationTargetException, InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException {
+    //获取Class对象
+    Class<?> c = Class.forName("code.Reflect.Student");
+
+    //Constructor<T> getDeclaredConstructor(Class<?>...parmeterTypes)
+    Constructor<?> con = c.getDeclaredConstructor(String.class);
+
+    //暴力反射
+    //public void setAccessible (boolean flag):值为true，取消访问检查
+    con.setAccessible(true);
+    
+    Object obj = con.newInstance("林青霞");
+    System.out.println(obj);
+}
+```
+
+
+
+### 2.5 反射获取成员变量并使用
+
+Class类中用于获取成员变量的方法：
+
+* Field[] getFields()：返回所有公共成员变量对象的数组
+* Field[] getDeclaredField()：返回所有成员变量对象的数组
+* Field[] getField(String name)：返回单个公共成员变量对象
+* Field getDeclaredField(String name)：返回单个成员变量对象
+
+
+
+Field类中用于给成员变量赋值的方法：
+
+* void set(Object obj,Object value)：给obj对象的成员变量赋值为value
+
+
+
+代码演示：
+
+```java
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchFieldException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        //获取Class对象
+        Class<?> c = Class.forName("code.Reflect.Student");
+
+        //Field[] getField()返回一个包含Field对象的数组，Field对象反映由该Class对象表示的类或接口的所有可访问的公共字段
+        //Field[] getDeclaredFields()返回一个包含Field对象的数组，反映了由该Class对象表示的类或接口声明的所有字段
+//        Field[] fields = c.getFields();
+        Field[] fields = c.getDeclaredFields();
+        for (Field field : fields){
+            System.out.println(field);
+        }
+        System.out.println("--------------");
+
+        //Field getField(String name) 返回一个Field对象，该对象反映该Class对象表示的类或接口的指定公共成员字段
+        //Field getDeclaredField(String name) 返回一个Field对象，该对象反映由该Class对象表示的类或接口的指定声明字段
+        Field addressField = c.getField("address");
+
+        //获取无参构造方法创建对象
+        Constructor<?> con = c.getConstructor();
+        Object obj = con.newInstance();
+
+        //Field提供有关类或接口的单个字段的信息和动态访问
+        //void set (object obj,Object value)将指定的对象参数中由此Field对象表示的字段设置为指定的新值
+        addressField.set(obj,"西安");  //给obj的成员变量addressField赋值为西安
+        
+        System.out.println(obj);
+
+//        Student s = new Student();
+//        s.address = "西安";
+//        System.out.println(s);
+    }
+```
+
+
+
+练习：
+
+* ​    **field.setAccessible(true);	值为true，取消访问检查**
+
+```java
+public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {
+    //获取Class对象
+    Class<?> c = Class.forName("code.Reflect.Student");
+    Constructor<?> con = c.getConstructor();
+    Object obj = con.newInstance();
+
+    Field field = c.getDeclaredField("name");
+    field.setAccessible(true);
+    field.set(obj,"林青霞");
+
+    field = c.getDeclaredField("age");
+    field.set(obj,30);
+
+    field = c.getField("address");
+    field.set(obj,"西安");
+
+    System.out.println(obj);
+}
+```
+
+
+
+### 2.7 反射获取成员方法并使用：
+
+Class类中用于获取成员方法的方法：
+
+* Method[] getMethods()：返回所有公共成员方法对象的数组，包括继承的
+* Method[] getDeclaredMethods()：返回所有成员方法对象的数组，不包括继承的
+* Method[] getMethod(String name,Class<?>...parameterTypes)：返回单个公共成员方法对象
+* Method[] getDeclaredMethod(String name,Class<?>...parameterTypes)：返回单个成员方法对象
+
+
+
+Method类中用于调用成员方法的方法：
+
+* Object invoke(Object obj,Object...args)：调用obj对象的成员方法，参数是args，返回值是Object类型
+
+
+
+代码演示：
+
+```java
+public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    //获取Class对象
+    Class<?> c = Class.forName("code.Reflect.Student");
+
+    //Method[] getMethods()
+    //返回包含一个数组 方法对象反射由此表示的类或接口的所有公共方法 类对象，包括那些由类或接口和那些从超类和超接口继承的声明。
+    //Method[] getDeclaredMethods()
+    //返回包含一个数组 方法对象反射的类或接口的所有声明的方法，通过此表示 类对象，包括公共，保护，默认（包）访问和私有方法，但不包括继承的方法。
+    //Method[] methods = c.getMethods();
+    Method[] methods = c.getDeclaredMethods();
+    for (Method method : methods){
+        System.out.println(method);
+    }
+    System.out.println("--------------");
+
+    //方法   getMethod(String name, 类<?>... parameterTypes)
+    //返回一个 方法对象，它反映此表示的类或接口的指定公共成员方法 类对象。
+    //方法   getDeclaredMethod(String name, 类<?>... parameterTypes)
+    //返回一个 方法对象，它反映此表示的类或接口的指定声明的方法 类对象。
+    Method m = c.getDeclaredMethod("method1");
+
+    //获取无参构造方法创造对象
+    Constructor<?> con = c.getConstructor();
+    Object obj = con.newInstance();
+
+    //在类或接口上提供有关单一方法的信息和访问权限
+    //Object invoke(Object obj,Object...args) 在具有指定参数的指定对象上调用此方法对象表示的基础方法
+    //Object：返回值类型
+    //obj：调用方法的对象
+    //args：方法需要的参数
+    m.invoke(obj);
+}
+```
+
+
+
+练习：
+
+代码演示：
+
+```java
+public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    //获取Class对象
+    Class<?> c = Class.forName("code.Reflect.Student");
+
+    Constructor<?> con = c.getConstructor();
+    Object obj = con.newInstance();
+
+    Method method1 = c.getDeclaredMethod("method1");
+    method1.invoke(obj);
+
+    Method method2 = c.getMethod("method2", String.class);
+    method2.invoke(obj,"林青霞");
+
+    Method method3 = c.getMethod("method3", String.class, int.class);
+    Object o = method3.invoke(obj,"林青霞",30);
+    System.out.println(o);
+
+    Method function = c.getDeclaredMethod("function");
+    function.setAccessible(true);
+    function.invoke(obj);
+}
+```
+
+
+
+练习：
+
+```java
+public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    //创建集合
+    ArrayList<Integer> array = new ArrayList<Integer>();
+
+    array.add(10);
+    array.add(20);
+
+    Class<? extends ArrayList> c = array.getClass();
+    Method m = c.getMethod("add", Object.class);
+    m.invoke(array,"hello");
+    m.invoke(array,"world");
+    m.invoke(array,"java");
+
+    System.out.println(array);
+}
+```
+
+
+
+练习：
+
+```java
+    public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+//        Students s = new Students();
+//        s.study();
+
+//        Teachers t = new Teachers();
+//        t.teach();
+
+        /*
+            class.txt
+            className = xxx
+            methodName = xxx
+         */
+
+        //加载数据
+        Properties prop = new Properties();
+        FileReader fr = new FileReader("src\\code\\class.txt");
+        prop.load(fr);
+        fr.close();
+
+        /*
+        className = code.Reflect.Students
+        methodName = study
+         */
+
+        String className = prop.getProperty("className");
+        String methodName = prop.getProperty("methodName");
+
+        //通过反射来使用
+        Class<?> c = Class.forName(className);
+
+        Constructor<?> con = c.getConstructor();
+
+        Object obj = con.newInstance();
+
+        Method m = c.getMethod(methodName);
+        m.invoke(obj);
+    }
+```
+
+
+
+## 模块化：
+
+### 概述：
+
+Java语言随着这些年的发展已经成为了一门影响深远的编程语言，无数平台，系统都采用Java语言编写。但是，但随着发展，Java也越来越庞大，逐渐发展成为一门“臃肿”的语言。而且，无论是运行一个大型的软件系统，还是运行一个小的程序，即使程序只需要使用Java的部分核心功能，JVM也要加载整个JRE环境。为了给Java“瘦身”，让Java实现轻量化，Java9正式的推出了模块化系统。Java被拆分为N多个模块，并允许Java程序可以根据需要选择加载程序必须得Java模块，这样就可以让Java以轻量化的方式来运行
+
+
+
+其实，java 7的时候已经提出了模块化的概念，但由于其过于复杂，java 7，java 8，都一直未能真正推出，直到java 9才真正成熟起来。对于java语言来说，模块化系统是一次真正的自我革新，这种革新使得“古老而庞大”的java语言重新焕发年轻的活力
+
+ ![image-20230202193825347](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230202193825347.png)
+
+
+
+### 模块的基本使用：
+
+模块的基本使用步骤：
+
+* 创建模块（按照以前的讲解方式创建模块，创建包，创建类，定义方法）
+
+  ​		为了体现模块的使用，我们创建2个模块，一个是myOne,一个是myTwo
+
+* 在模块的src目录下新建一个名为module-info.java的描述性文件，该文件专门定义模块名，访问权限，模块依赖等信息
+
+  ​			描述性文件中使用模块导出和模块依赖来进行配置并使用
+
+* 模块中所有未导出的包都是模块私有的，他们是不能再模块之外被访问的
+
+  ​		在myOne这个模块下的描述性文件中配置模块导出
+
+  ​		模块导出格式：export包名；
+
+* 一个模块要访问其他的模块，必须明确指定依赖哪些模块，未明确指定依赖的模块不能访问
+
+  在myTwo这个模块下的描述性文件中配置模块依赖
+
+  模块依赖格式：requires 模块名；
+
+  注意：写模块名错误，需要按下Alt + Enter提示，然后选择模块依赖
+
+* 在myTwo这个模块的类中使用依赖模块下的内容
+
+
+
+### 模块服务的使用：
+
+服务：从java 6 开始，java提供了一种服务机制，允许服务提供者和服务使用者之前完成解耦
+
+简单地说，就是服务使用者只面向接口编程，但不清楚服务提供者的实现类
+
+
+
+java 9的模块化系统则进一步的简化了java的服务机制。java 9允许将服务接口定义在一个模块中,并使用uses语句来声明该服务接口，然后针对该服务接口提供不同的服务实现类，这些服务实现类可以分布在不同的模块中，服务实现模块则使用provides语句为服务接口指定实现类
+
+服务使用者只需要面向接口编程即可
+
+
+
+模块uwide使用步骤：
+
+* 在myOne模块下创建一个包com.itheima_03,在该包下提供一个接口，接口定义一个抽象方法
+
+  public interface MyService{
+
+  ​	void service();
+
+  }
+
+* 在com.itheima_03包下创建一个包impl,在该包下提供接口的两个实现类itheima和Czxy
+
+* 在myOne这个模块下的描述性文件中添加如下配置
+
+  模块导出：exports com.itheima_03
+
+  服务提供：provides MyService with Itheima;	指定MyService的服务实现类是Itheima
+
+* 在myTwo这个模块下的描述性文件中添加如下配置
+
+  声明服务接口：uses MyService;
+
+* 在myTwo这个模块的类中标使用MyService接口提供的服务
+
+  ServiceLoader：一种加载服务实现的工具
+
+  
