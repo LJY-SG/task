@@ -747,7 +747,211 @@ select lpad(round(rand() * 1000000,0),6,'0');
 
 
 
+## 4 约束
 
+### 4.1 概述
+
+* 概念：约束是作用于表中字段上的规则，用于限制存储在表中的数据
+
+* 目的：保证数据库中数据的正确、有效性和完整性
+
+* 分类：
+
+  | 约束                     | 描述                                                     | 关键字      |
+  | ------------------------ | -------------------------------------------------------- | ----------- |
+  | 非空约束                 | 限制该字段的数据不能为null                               | NOT NULL    |
+  | 唯一约束                 | 保证该字段的所有数据都是唯一、不重复的                   | UNIQUE      |
+  | 主键约束                 | 主键是一行数据的唯一标识，要求非空且唯一                 | PRIMARY KEY |
+  | 默认约束                 | 保存数据时，如果未指定该字段的值，则采用默认值           | DEFAULT     |
+  | 检查约束(8.0.16版本之后) | 保证字段值满足某一个条件                                 | CHECK       |
+  | 外键约束                 | 用来让两张表的数据之间建立连接，保证数据的一致性和完整性 | FOREIGN KEY |
+
+
+
+### 4.2 约束演示
+
+```sql
+create table user (
+    id int primary key auto_increment comment '主键',
+    name varchar(10) not null unique comment '姓名',
+    age int check ( age > 0 && age <= 120 ) comment '年龄',
+    status char(1) default '1' comment '状态',
+    gender char(1) comment '性别'
+)comment '用户表';
+
+insert into user (name, age, status, gender) values ('Tom1',19,'1','男'),('Tom2',25,'0','男');
+
+insert into user (name, age, status, gender) values ('Tom3',19,'1','男');
+
+insert into user (name, age, status, gender) values ('Tom4',80,'1','男');
+
+insert into user (name, age, gender) values ('Tom5',120,'男');
+```
+
+
+
+### 4.3 外键约束
+
+* 概念：
+
+  外键用来让两张表的数据之间建立连接，从而保证数据的一致性和完整性。
+
+* 语法
+
+  * 添加外键
+
+  ```sql
+  CREATE TABLE 表名(
+  		字段名 数据类型
+  		...
+  		[CONSTRAINT] [外键名称] FOREIGN KEY(外键字段名) REFERENCES 主表 (主表列明);
+  )
+  ```
+
+  ```sql
+  ALTER TABLE 表名 ADD CONSTRAINT 外键名称 KEY(外键字段名) REFERENCES 主表 (主表列表);
+  ```
+
+  代码演示：
+
+  ```sql
+  alter table emp add constraint fk_emp_dept_id foreign key (dept_id) references depy(id);
+  ```
+
+  * 删除外键
+
+    ```sql
+    ALTER TABLE 表名 DROP FOREIGN KEY 外键名称
+    ```
+
+    代码演示：
+
+    ```sql
+    ALTER TABLE emp DROP FOREIGN KEY fk_emp_dept_id;
+    ```
+
+
+
+* 删除/更新行为
+
+  | 行为        | 说明                                                         |
+  | ----------- | ------------------------------------------------------------ |
+  | NO ACTION   | 当在父表中删除/更新对应记录时，首先检查该记录是否有对应外键，如果有则不允许删除/更新。(与RESTRAIN一致) |
+  | RESTRAIN    | 当在父表中删除/更新对应记录时，首先检查该记录是否有对应外键，如果有则不允许删除/更新。(与NO ACTION一致) |
+  | CASCASE     | 当在父表中删除/更新对应记录时，首先检查该记录是否有对应外键，如果有，则也删除/更新外键在子表中的记录 |
+  | SET NULL    | 当在父表中删除对应记录时，首先检查该记录是否有对应外键，如果有则设置子表中该外键值为null(这就要求该外键允许取null) |
+  | SET DEFAULT | 父表有变更时，子表将外键列设置成一个默认值(Innodb不支持)     |
+
+```sql
+ALTER TABLE 表名 ADD CONSTRAINT 外键名称 FOREIGN KEY (外键字段) REFERENCES 主表名 (猪表字段名) ON UPDATE CASCADE ON DELETE CASCADE;
+```
+
+
+
+## 5 多表查询
+
+### 5.1 多表关系
+
+* 概述：项目开发中，在进行数据库表结构设计时，会根据业务需求及业务模块之间的关系，分析并设计表结构，由于业务之间相互关联，所以各个表结构之间也存在着各种联系，基本上分为3种 ：
+
+  * 一对多(多对一)
+  * 多对多
+  * 一对一
+
+* 一对多(多对一)
+
+  * 案例：部门与员工的关系
+  * 关系：一个部门对应多个员工，一个员工对应一个部门
+  * 实现：在多的一方建立外键，指向一的一方的主键
+
+  ![image-20230204191148879](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230204191148879.png)
+
+* 多对多
+
+  * 案例：学生与课程的关系
+
+  * 关系：一个学生可以选修多门课程，一门课程也可以供多个学生选择
+
+  * 实现：建立第三张中间表，中间表至少包含两个外键，分别关联两方主键
+
+    ![image-20230204191434965](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230204191434965.png)
+
+![image-20230204192802162](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230204192802162.png)
+
+
+
+* 一对一
+  * 案例：用户与用户详情的关系
+  * 关系：一对一关系，多用于单表拆分，将一张表的基础字段放在一张表中，其他详情字段放在另一张表中，以提升操作效率
+  * 实现：在任意一方加入外键，关联另一方的主键，并且设置外键为唯一的(UNIQUE)
+
+![image-20230204193441164](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230204193441164.png)
+
+
+
+### 5.2 多表查询概述
+
+* 概述：指从多张表中查询数据
+* 笛卡尔积：笛卡尔乘积是指在数学中，两个集合 A集合和B集合的所有组合情况。(在多表查询时，需要消除无效的笛卡尔积)
+
+
+
+* 多表查询分类
+  * 内连接：相当于查询A、B交集部分数据
+  * 外连接：
+    * 左外连接：查询左表所有数据，以及两张表交集部分数据
+    * 右外连接：查询右表所有数据，以及两张表交集部分数据
+  * 自连接：当前表与自身的连接查询，自连接必须使用表别名
+
+![image-20230204213110436](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230204213110436.png)
+
+* 子查询
+
+
+
+### 5.3 内连接
+
+* 语法：
+
+  * 隐式内连接
+
+  ```sql
+  SELECT 字段列表 FROM 表1，表2 WHERE 条件...;
+  ```
+
+  * 显式内连接
+
+  ```sql
+  SELECT 字段列表 FROM 表1 [INNER] JOIN 表2 ON 连接条件...;
+  ```
+
+* 内连接查询的是两张表交集的部分
+
+![image-20230204213110436](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230204213110436.png)
+
+### 5.4 外连接
+
+
+
+
+
+
+
+
+
+### 5.5 自连接
+
+
+
+
+
+### 5.6 子查询
+
+
+
+
+
+### 5.7 多表查询案例
 
 
 
