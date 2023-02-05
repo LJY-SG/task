@@ -830,7 +830,7 @@ insert into user (name, age, gender) values ('Tom5',120,'男');
     ALTER TABLE emp DROP FOREIGN KEY fk_emp_dept_id;
     ```
 
-
+ 
 
 * 删除/更新行为
 
@@ -894,8 +894,6 @@ ALTER TABLE 表名 ADD CONSTRAINT 外键名称 FOREIGN KEY (外键字段) REFERE
 * 概述：指从多张表中查询数据
 * 笛卡尔积：笛卡尔乘积是指在数学中，两个集合 A集合和B集合的所有组合情况。(在多表查询时，需要消除无效的笛卡尔积)
 
-
-
 * 多表查询分类
   * 内连接：相当于查询A、B交集部分数据
   * 外连接：
@@ -931,27 +929,230 @@ ALTER TABLE 表名 ADD CONSTRAINT 外键名称 FOREIGN KEY (外键字段) REFERE
 
 ### 5.4 外连接
 
+* 语法
 
+  * 左外连接：查询左表所有数据，以及两张表交集部分数据
 
+    ```sql
+    SELECT 字段列表 FROM 表1 LEFT [OUTER] JOIN 表2 ON 条件...;
+    ```
 
+    相当于查询表1(左表)的所有数据 包含 表1和表2交集部分的数据
 
+  * 右外连接：查询右表所有数据，以及两张表交集部分数据
 
+    ```sql
+    SELECT 字段列表 FROM 表1 RIGHT [OUTER] JOIN 表2 ON 条件...;
+    ```
 
+    相当于查询表2(右表)的所有数据 包含 表1和表2交集部分的数据
 
+  
 
 ### 5.5 自连接
 
+* 语法：
+
+  ```sql
+  SELECT 字段列表 FROM 表A 别名A JOIN 表A 别名B ON 条件...;
+  ```
+
+  自连接查询，可以是内连接查询，也可以是外连接查询
 
 
 
+### 5.6 联合查询
 
-### 5.6 子查询
+* 联合查询-union，union all
+
+  对于union查询，就是把多次查询的结果合并起来，形成一个新的查询结果集。
+
+  ```sql
+  SELECT 字段列表 FROM 表A ...
+  UNION [ALL]
+  SELECT 字段列表 FROM 表B;
+  ```
+
+  * 对于联合查询的多张表的列数必须保持一致，字段类型也需要保持一致。
+
+  * union all 会将全部的数据直接合并在一起，union 会对合并之后的数据去重。
 
 
 
+### 5.7 子查询
+
+* 概念：SQL语句中嵌套SELECT语句，称为嵌套查询，又称子查询
+
+```sql
+SELECT * FROM t1 WHERE column1 = (SELECT column1 FROM t2);
+```
+
+子查询外部的语句可以是INSERT / UPDATE / DELETE / SELECT 的任何一个
+
+* 根据子查询结果不同，分为：
+  * 标量子查询(子查询结果为单个值)
+  * 列子查询(子查询结果为一列)
+  * 行子查询(子查询结果为一行)
+  * 表子查询(子查询结果为多行多列)
+
+* 根据子查询位置，分为：WHERE 之后、FROM之后、SELECT之后。
 
 
-### 5.7 多表查询案例
+
+* 标量子查询：
+
+  * 子查询返回的结果是单个值(数字、字符串、日期等)，最简单的形式，这种子查询称为标量子查询
+  * 常用的操作符：=     <>   >   >=   <   <=
+
+* 列子查询
+
+  * 子查询返回的结果是一列(可以是多行)，这种子查询称为列子查询
+
+  * 常用操作符：IN、NOT IN、ANY、SOME、ALL
+
+    | 操作符 | 描述                                   |
+    | ------ | -------------------------------------- |
+    | IN     | 在指定的集合范围之内，多选一           |
+    | NOT IN | 不在指定的集合范围之内                 |
+    | ANY    | 子查询返回列表中，有任意一个满足即可   |
+    | SOME   | 与ANY等同，使用SOME的地方都可以使用ANY |
+    | ALL    | 子查询返回列表的所有值都必须满足       |
+
+  演示：
+
+  ```sql
+  select * from emp where salary > any (select salary from emp where dept_id = (select id from depy where name = '研发部'));
+  ```
+
+* 行子查询
+
+  * 子查询返回的结果是一行(可以是多列)，这种子查询称为行子查询
+  * 常用的操作符： = 、<>、IN、NOT IN
+
+  演示：
+
+  ```sql
+  select * from emp where (salary,managerid) = (select salary,managerid from emp where name = '张无忌');
+  ```
+
+* 表子查询
+
+  * 子查询返回的结果是多行多列，这种子查询称为表子查询
+  * 常用操作符：IN
+
+  ```sql
+  select e.*,depy.* from (select * from emp where entrydate > '2006-01-01') e left join depy on e.dept_id = depy.id;
+  ```
 
 
 
+## 6 事务
+
+### 6.1 事务简介
+
+事务是一组操作的集合，他是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。
+
+![image-20230205154159967](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230205154159967.png)
+
+默认MySQL的事务是自动提交的，也就是说，当执行一条DML语句，MySQL会立即隐式地提交事务。
+
+
+
+### 6.1 事务操作
+
+* 查看/设置事务提交方式
+
+  ```sql
+  SELECT @@autocommit;
+  ```
+
+  ```sql
+  SET @@autocommit = 0;
+  ```
+
+* 提交事务
+
+  ```sql
+  COMMIT;
+  ```
+
+* 回滚事务
+
+  ```sql
+  ROLLBACK;
+  ```
+
+
+
+* 开启事务
+
+  ```sql
+  START TRANSACTION 或 GEGIN;
+  ```
+
+* 提交事务
+
+  ```sql
+  COMMIT;
+  ```
+
+* 回滚事务
+
+  ```sql
+  ROLLBACK;
+  ```
+
+
+
+事务控制可以有两种方式：
+
+* 关闭事务的自动提交，改为手动，通过commit提交以及rollback回滚
+* 通过指令start transaction 或 begin 显示地来开启事务，执行成功就commit，失败则rollback.
+
+
+
+### 6.2 事务四大特性(ACID)
+
+*  原子性(Atomicity)：事务是不可分割的最小操作单元，要么全部成功，要么全部失败。
+* 一致性(Consistency)：事务完成时，必须使所有的数据都保持一致状态。
+* 隔离性(Isolation)：数据库系统提供的隔离机制，保证事务在不受外部并发操作影响的独立环境下运行。
+* 持久性(Durability)：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。
+
+
+
+### 6.3 并发事务问题
+
+| 问题       | 描述                                                         |
+| ---------- | ------------------------------------------------------------ |
+| 脏读       | 一个事务读到另一个事务还没有提交的数据                       |
+| 不可重复读 | 一个事务先后读取同一条记录，但两次读取的数据不同，称之为不可重复读 |
+| 幻读       | 一个事务按照条件查询数据时，没有对应的数据行，但是在插入数据时，又发现这行数据已经存在，好像出现了”幻影“ |
+
+![image-20230205162048453](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230205162048453.png)
+
+![image-20230205162511773](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230205162511773.png)
+
+![image-20230205162745180](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230205162745180.png)
+
+
+
+### 6.4 事务隔离级别
+
+| 隔离级别              | 脏读 | 不可重复读 | 幻读 |
+| --------------------- | ---- | ---------- | ---- |
+| Read uncommited       | √    | √          | √    |
+| Read commited         | ×    | √          | √    |
+| Repeatable Read(默认) | ×    | ×          | √    |
+| Serializable          | ×    | ×          | ×    |
+
+* 查看事务隔离级别
+
+  ```sql
+  SELECT @@TRANSACTION_ISOLATION;
+  ```
+
+* 设置事务隔离级别
+
+  ```sql
+  SET [SESSION|GLOBAL] TRANSACTION ISOLATION {READ UNCOMMITTED | READ COMMITTED | REPEATABLE READ | SERIALIZABLE}
+  ```
