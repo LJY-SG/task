@@ -1,9 +1,7 @@
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class test {
-    public static void main(String[] args) throws SQLException, IOException, InterruptedException {
+    public static void main(String[] args) throws Exception {
         Func func = new Func();
         Scanner sc = new Scanner(System.in);
         boolean flag = true;
@@ -14,7 +12,7 @@ public class test {
                 case 1:
                     try {
                         func.regester();
-                    } catch (IOException | SQLException e) {
+                    } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                     break;

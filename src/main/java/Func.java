@@ -1,4 +1,3 @@
-import java.io.*;
 import java.sql.*;
 import java.util.Scanner;
 
@@ -27,7 +26,7 @@ public class Func implements system{
     }
 
     //注册功能
-    public void regester() throws IOException, SQLException {
+    public void regester() throws SQLException {
         System.out.println("----------欢迎使用注册功能！----------");
         System.out.print("请设置您的用户名: ");
         user.setName(sc.nextLine());
@@ -49,9 +48,11 @@ public class Func implements system{
         //4，获取执行sqL的对象 Statement
         conn.createStatement();
 
+        boolean flag = start(user.getPwd());
+
         if (rs.next()){
             System.out.println("--------注册失败,该用户已经存在--------");
-        }else if(!user.getPwd().startsWith(" ") && user.getPwd().equals(pwd)){
+        }else if(!flag && user.getPwd().equals(pwd)){
             String sql1 = "insert into User (name,password) values(?,?);";
             PreparedStatement pstmt2 = conn.prepareStatement(sql1);
             pstmt2.setString(1,user.getName());
@@ -66,7 +67,7 @@ public class Func implements system{
     }
 
     //登录功能
-    public void Login() throws IOException, InterruptedException, SQLException {
+    public void Login() throws SQLException, InterruptedException {
         int count = 10;
         while (true) {
             System.out.println("----------欢迎使用登录功能！----------");
@@ -111,7 +112,7 @@ public class Func implements system{
     }
 
     //忘记密码功能
-    public void Forget() throws IOException, SQLException {
+    public void Forget() throws SQLException {
         System.out.println("----------欢迎使用忘记密码功能----------");
         System.out.print("请输入您的用户名 :");
         String name = sc.nextLine();
@@ -128,26 +129,29 @@ public class Func implements system{
 
         //4，获取执行sqL的对象 Statement
         conn.createStatement();
-        boolean flag = false;
 
+        boolean judge = start(pwd2);
+
+        boolean flag = false;
         while (rs1.next()){
             //定义sql
-            String sql2 = "delete from user where name = ? ";
+            if (!judge){
+            String sql2 = "update user set password= ? where name = ?";
             //获取pstmt对象
             PreparedStatement pstmt2 = conn.prepareStatement(sql2);
             //设置？的值
-            pstmt2.setString(1,name);
+            pstmt2.setString(1,pwd2);
+            pstmt2.setString(2,name);
             pstmt2.execute();
-            flag = true;
-        }
-
-        if (flag){
-            String sql3 = "insert into User (name,password) values(?,?);";
-            PreparedStatement pstmt3 = conn.prepareStatement(sql3);
-            pstmt3.setString(1,name);
-            pstmt3.setString(2,pwd2);
-            pstmt3.execute();
             System.out.println("----------修改成功!----------");
+            }
+            flag=true;
+        }
+        if (!flag){
+            System.out.println("-----------该用户不存在-----------");
+        }
+        if (judge==true){
+            System.out.println("----------您输入的密码不符合规范，请重新设置您的密码----------");
         }
     }
 
@@ -157,4 +161,15 @@ public class Func implements system{
     }
 
 
+    //判断密码是否有特殊字符开头
+    public boolean start(String pwd) {
+        boolean flag = false;
+        String[] s = {"!","@","#","$","%","^","&","*","(",")","-","_","=","+","——","[","]","{","}","/","?",";","|","~","'","<",".",">",","," "};
+        for (String ss :s){
+            if (pwd.startsWith(ss)){
+                flag = true;
+            }
+        }
+        return  flag;
+    }
 }
