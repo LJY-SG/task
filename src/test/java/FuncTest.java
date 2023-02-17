@@ -1,25 +1,23 @@
-import org.junit.Test;
-
+import static org.junit.Assert.*;
 
 public class FuncTest {
 
-    @Test
+    @org.junit.Test
     public void menu() {
     }
 
-    @Test
+    @org.junit.Test
     public void regester() {
     }
 
-    @Test
+    @org.junit.Test
     public void login() {
     }
 
-    @Test
+    @org.junit.Test
     public void forget() {
     }
-
-    @Test
+    @org.junit.Test
     public void exit() {
     }
 }

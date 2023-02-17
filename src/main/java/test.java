@@ -1,8 +1,7 @@
-import java.io.IOException;
 import java.util.Scanner;
 
-public class Test {
-    public static void main(String[] args) throws IOException, InterruptedException {
+public class test {
+    public static void main(String[] args) throws Exception {
         Func func = new Func();
         Scanner sc = new Scanner(System.in);
         boolean flag = true;
@@ -11,13 +10,21 @@ public class Test {
             int choice = sc.nextInt();
             switch (choice) {
                 case 1:
-                    func.regester();
+                    try {
+                        func.regester();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
                 case 2:
                     func.Login();
                     break;
                 case 3:
-                    func.Forget();
+                    try {
+                        func.Forget();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
                 case 4:
                     func.exit();
@@ -27,5 +34,7 @@ public class Test {
                     System.out.println("输入异常，请重新输入!");
             }
         }
+
+
     }
 }
