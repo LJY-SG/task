@@ -2407,6 +2407,556 @@ name:${loginUser.name}
 
 
 
+# 10 Servlet过滤器Filter
+
+## 10.1 过滤器Filter
+
+* 什么是过滤器：（检验是否符合要求，或者对内容做二次处理，设置编码响应等）
+
+  * filter 简单理解：人 ----> 检票员（filter） -----> 景点
+
+* Servlet里面的过滤器作用
+
+  * 动态地拦截请求和响应，变换或使用包含在请求或响应中的信息
+  * 在客户端的请求访问后端资源之前，拦截这些请求
+  * 在服务器的响应发送回客户端之前，处理这些响应
+
+* Filter 的生命周期
+
+  * init(FilterConfig filterConfig) //只容器初始化的时候调用一次，即应用启动的时候加载一次
+
+  * doFilter(ServletRequest request,ServletResponse response,FilterChain chain)
+
+    只要命中过滤规则就触发，可以在filter中根据条件决定是否调用chain.doFilter(request,response)方法
+
+    法，即是否让目标资源执行
+
+  * destroy()  //只容器销毁的时候调用一次，即应用停止的时候调用一次
+
+* 元注解：@WebFilter
+
+```
+//该Filter是否支持异步操作模式
+asyncSupported 
+
+//指定Filter对那种dispatcher模式进行过滤  该属性支持 Async,Error,Forward,include,request
+dispatcherType
+
+//Filter 显示的名称
+displayName
+
+//Filter的名称
+filterName
+
+//Filter的配置参数
+initParams
+
+//过滤的Servlet可以指定多个，表示对这几个特定的servlet 进行过滤
+servletName
+
+//指定 Filter 拦截的URL，和上面的servletName配置一样，用*可以表示通配符，但是不用字母后加*，应该按照模块划分，比如/user/*
+urlPatterns/value
+```
+
+
+
+* 过滤器实战
+
+```java
+@WebFilter(filterName = "xxx",urlPatterns = {"/*"})
+public class CustomFilter implements Filter {
+    @Override
+    public void init(FilterConfig filterConfig) {
+        System.out.println("CustomFilter init");
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        System.out.println("CustomFilter doFilter");
+
+        servletRequest.setCharacterEncoding("UTF-8");
+        servletResponse.setCharacterEncoding("UTF-8");
+        servletResponse.setContentType("text/html;charset=utf-8");
+        
+        //让请求继续往下走
+        filterChain.doFilter(servletRequest,servletResponse);
+    }
+
+    @Override
+    public void destroy() {
+        System.out.println("CustomFilter destroy");
+    }
+}
+```
+
+
+
+## 10.2 Servlet Filter 配置参数详解
+
+* FilterConfig类：
+  * 过滤器配置类，可以通过这个获取过滤器基本信息
+
+
+
+* dispatchType 参数
+  * 指定Filter对那种dispatch模式进行过滤，不符合的则不进行过滤
+    * **REQUEST：默认值，浏览器直接请求的资源会被过滤器拦截**
+    * **FORWARD：转发访问资源会被过滤器拦截**
+    * INCLUDE：包含访问资源
+    * ERROR：错误跳转资源
+    * ASYNC：异步访问资源
+* 实操：
+
+```java
+@WebFilter(filterName = "xxx",urlPatterns = {"/*"},initParams = {
+        @WebInitParam(name = "encoding",value="UTF-8"),
+        @WebInitParam(name = "loginPage",value="/login.jsp"),
+},dispatcherTypes = {DispatcherType.FORWARD})
+
+public class CustomFilter implements Filter {
+    private FilterConfig filterConfig;
+    private String encoding;
+    private String loginPage;
+
+
+    @Override
+    public void init(FilterConfig filterConfig) {
+        System.out.println("CustomFilter init");
+        this.filterConfig = filterConfig;
+
+        String filterName = filterConfig.getFilterName();
+        System.out.println("filterName = "+filterName);
+
+        String encoding = filterConfig.getInitParameter("encoding");
+        this.loginPage = filterConfig.getInitParameter("loginPage");
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        System.out.println("CustomFilter doFilter");
+
+        servletRequest.setCharacterEncoding("UTF-8");
+        servletResponse.setCharacterEncoding("UTF-8");
+        servletResponse.setContentType("text/html;charset=utf-8");
+
+        //让请求继续往下走
+        filterChain.doFilter(servletRequest,servletResponse);
+    }
+
+    @Override
+    public void destroy() {
+        System.out.println("CustomFilter destroy");
+    }
+}
+```
+
+
+
+10.3 过滤器实战之Filter用户登录访问个人页面拦截
+
+* 开发登录Servlet
+
+```java
+@WebServlet("/loginServlet")
+public class LoginServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        this.doPost(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String name = req.getParameter("name");
+        String pwd = req.getParameter("pwd");
+
+        if (name.equals("xdclass") && pwd.equals("123")){
+            User user = new User();
+            user.setId(121);
+            user.setName(name);
+            user.setHost("xdclass.net");
+            req.getSession().setAttribute("loginUser",user);
+            req.getRequestDispatcher("/user/user.jsp").forward(req,resp);
+        }else {
+            req.setAttribute("msg","账号密码错误");
+            req.getRequestDispatcher("/login.jsp").forward(req,resp);
+        }
+    }
+}
+```
+
+
+
+* 开发登录过滤器
+
+```java
+@WebFilter(filterName = "loginFilter",urlPatterns = {"/user/*"},initParams = {
+        @WebInitParam(name = "encoding",value="UTF-8"),
+        @WebInitParam(name = "loginPage",value="/login.jsp"),
+})
+
+public class LoginFilter implements Filter {
+    private FilterConfig filterConfig;
+    private String encoding;
+    private String loginPage;
+    @Override
+    public void init(FilterConfig filterConfig) {
+        System.out.println("CustomFilter init");
+        this.filterConfig = filterConfig;
+
+        this.encoding = filterConfig.getInitParameter("encoding");
+        this.loginPage = filterConfig.getInitParameter("loginPage");
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        System.out.println("CustomFilter doFilter");
+
+        servletRequest.setCharacterEncoding("UTF-8");
+        servletResponse.setCharacterEncoding("UTF-8");
+        servletResponse.setContentType("text/html;charset=utf-8");
+
+        HttpServletRequest httpServletRequest = (HttpServletRequest)servletRequest;
+        HttpServletResponse httpServletResponse = (HttpServletResponse)servletResponse;
+
+        if (httpServletRequest.getSession().getAttribute("loginUser") != null) {
+            filterChain.doFilter(servletRequest,servletResponse);
+        }else {
+            httpServletRequest.setAttribute("msg","非法访问，请登录");
+            httpServletRequest.getRequestDispatcher(loginPage).forward(httpServletRequest,httpServletResponse);
+        }
+
+        //让请求继续往下走
+        filterChain.doFilter(servletRequest,servletResponse);
+    }
+    @Override
+    public void destroy() {
+        System.out.println("CustomFilter destroy");
+    }
+}
+```
+
+
+
+* 登录界面 login.jsp
+
+```html
+<body>
+<form action="<%=request.getContextPath()%>/loginServlet" method="post">
+
+    名称:<input type="text" name="name"/>
+    <br>
+    密码:<input type="password" name="pwd"/>
+
+    <input type="submit" value="登录">
+
+    消息提示 ${msg}
+</form>
+</body>
+```
+
+
+
+# 11 Listener监听器
+
+## 11.1 Listener监听器简介
+
+* 什么是监听器：
+  * 监听器是一个实现了特定接口的普通java类，用于监听其他对象的创建和销毁，监听其他对象的方法执行和属性改变
+  * 声控灯开关
+
+<img src="C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230228164657892.png" alt="image-20230228164657892" style="zoom: 150%;" />
+
+
+
+* java里面的监听器：
+
+  * 作用：监听域对象的创建和销毁，比如request / session / context
+  * 分类：
+    * ServletContextListener
+    * HttpSessionListener
+    * ServletRequestListener
+
+* 监听器的实现步骤：
+
+  （1）创建一个普通的java类
+
+  （2）让该类实现监听器接口
+
+  （3）在该类中实现监听器接口的方法
+
+  （4）旧版的在web.xml中通过 <listener> 标签来配置监听器，新版使用@WebListener
+
+
+
+## 11.2 实战-自定义ServletContext监听器
+
+* 使用场景：加载全局变量，初始化项目信息
+* web.xml配置
+
+```xml
+  <context-param>
+    <param-name>url</param-name>
+    <param-value>https://xdclass.net</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>topic</param-name>
+    <param-value>小滴课堂java高级工程师成长专题视频</param-value>
+  </context-param>
+```
+
+* 监听器开发
+
+```java
+@WebListener()
+public class ContextListener implements ServletContextListener {
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        System.out.println("ContextListener contextInitialized");
+        ServletContext servletContext = sce.getServletContext();
+        String url = servletContext.getInitParameter("url");
+        String topic = servletContext.getInitParameter("topic");
+
+        Config config = new Config();
+        config.setTopic(topic);
+        config.setUrl(url);
+
+        servletContext.setAttribute("config",config);
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        System.out.println("ContextListener contextDestroyed");
+    }
+}
+```
+
+
+
+## 11.3 监听器实战-HttpSessionListener统计在线人数
+
+* session使用场景
+  * 和session相关操作，比如统计网站在线人数，当前服务器的负载情况等
+* ContextListener配置
+
+```
+//获取上下文对象
+ServletContext sc = sce.getServletContext();
+sc.setAttribute("onlineNum",0);
+```
+
+* HttpSessionListener 开发
+
+```java
+@WebListener
+public class SessionListener implements HttpSessionListener {
+
+    @Override
+    public void sessionCreated(HttpSessionEvent se) {
+        System.out.println("SessionListener sessionCreated");
+
+        ServletContext servletContext = se.getSession().getServletContext();
+
+        //获取在线人数
+        Integer onlineNum = (Integer)servletContext.getAttribute("onlineNum");
+
+        //新增1
+        servletContext.setAttribute("onlineNum",++onlineNum);
+    }
+
+    @Override
+    public void sessionDestroyed(HttpSessionEvent se) {
+        System.out.println("SessionListener sessionDestroyed");
+
+        ServletContext servletContext = se.getSession().getServletContext();
+
+        //获取在线人数
+        Integer onlineNum = (Integer)servletContext.getAttribute("onlineNum");
+
+        //减少1
+        servletContext.setAttribute("onlineNum",--onlineNum);
+    }
+}
+```
+
+* add.jsp
+
+```html
+<body>
+<hr>
+近30分钟在线人数: ${ applicationScope.onlineNum }
+
+</body>
+```
+
+* delete.jsp
+
+```java
+<body>
+销毁session
+<hr>
+<% request.getSession().invalidate(); %>
+</body>
+```
+
+* 注意：
+  * 关闭启动Tomcat自动打开浏览器，因为会触发会触发多个session
+  * 使用多个浏览器测试 粗略统计，如果是多机器分布式情况，需要用到分布式缓存
+
+
+
+## 11.4 实战ServletRequestListener 统计网站请求量
+
+* ContextListener配置
+
+```java
+//获取上下文对象
+ServletContext sc = sce.getServletContext();
+sc.setAttribute("onlineNum",0);
+sc.setAttribute("totalVisit",0);
+```
+
+
+
+* RequestListener开发
+
+```java
+public class SessionListener implements HttpSessionListener {
+
+    @Override
+    public void sessionCreated(HttpSessionEvent se) {
+        System.out.println("SessionListener sessionCreated");
+
+        ServletContext servletContext = se.getSession().getServletContext();
+
+        //获取在线人数
+        Integer onlineNum = (Integer)servletContext.getAttribute("onlineNum");
+
+        //新增1
+        servletContext.setAttribute("onlineNum",++onlineNum);
+    }
+
+    @Override
+    public void sessionDestroyed(HttpSessionEvent se) {
+        System.out.println("SessionListener sessionDestroyed");
+
+        ServletContext servletContext = se.getSession().getServletContext();
+
+        //获取在线人数
+        Integer onlineNum = (Integer)servletContext.getAttribute("onlineNum");
+
+        //减少1
+        servletContext.setAttribute("onlineNum",--onlineNum);
+    }
+}
+```
+
+
+
+```java
+public class RequestListener implements ServletRequestListener {
+
+    @Override
+    public void requestDestroyed(ServletRequestEvent sre) {
+        System.out.println("RequestListener requestDestroyed");
+    }
+
+    @Override
+    public void requestInitialized(ServletRequestEvent sre) {
+        System.out.println("RequestListener requestInitialized");
+
+        Integer totalVisit = (Integer) sre.getServletContext().getAttribute("totalVisit");
+        System.out.println("历史总访问次数:"+ totalVisit);
+        totalVisit++;
+        sre.getServletContext().setAttribute("totalVisit",totalVisit);
+    }
+}
+```
+
+
+
+* add.jsp
+
+```html
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
+<html>
+<head>
+    <title>小滴课堂javaweb统计在线人数</title>
+</head>
+<body>
+<hr>
+近30分钟在线人数: ${ applicationScope.onlineNum }
+<hr>
+应用服务器启动后总访问次数: ${ totalVisit }
+</body>
+</html>
+```
+
+
+
+# 12 javaweb文件上传
+
+* javaweb文件上传
+  * Web应用系统开发中，文件上传和下载功能是非常常用的功能，浏览器在上传的过程中是将文件以流的形式提交到服务器端的
+
+
+
+* 前端开发
+  * 表单的提交方式必须是post
+  * 需要声明是一个文件上传组件 <input type="file" name="img"/>
+  * 必须设置表单的enctype="multipart/form-data"
+
+```
+
+```
+
+* 后端开发
+
+
+
+* 注意点：
+  * 考虑文件上传存储的目录
+  * 防止文件重名覆盖，防止一个目录下面出现太多文件，限制上传文件的最大值，上传的文件判断后缀名是否合法
+
+
+
+* 互联网公司里面的文件服务器：
+  * 基本很少互联网公司把文件存储在javaweb项目里面，一个是性能，一个是成本
+  * 多数是会搭建专门的文件服务器，或者使用第三方的CDN，比如阿里云的OSS，高级架构课程会讲这块知识点
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
