@@ -419,7 +419,7 @@ rs.getXxx(参数);
   //SQL语句中的参数值，使用? 占位符替代
   String sql = "select * from user where username = ? and password = ?"
   // 通过Connection对象获取，并传入对应的sql语句
-  PreparedStatement pstmt = conn.prepareStatement(sal);
+  PreparedStatement pstmt = conn.prepareStatement(sql);
   ```
 
   * 设置参数值
@@ -2897,6 +2897,8 @@ public class RequestListener implements ServletRequestListener {
 
 # 12 javaweb文件上传
 
+## 12.1 javaweb文件上传
+
 * javaweb文件上传
   * Web应用系统开发中，文件上传和下载功能是非常常用的功能，浏览器在上传的过程中是将文件以流的形式提交到服务器端的
 
@@ -2907,11 +2909,76 @@ public class RequestListener implements ServletRequestListener {
   * 需要声明是一个文件上传组件 <input type="file" name="img"/>
   * 必须设置表单的enctype="multipart/form-data"
 
-```
-
+```java
+<body>
+<form action="<%=request.getContextPath()%>/fileUpload" method="post" enctype="multipart/form-data">
+    用户名:<input type="text" name="username">
+    头像:<input type="file" name="img">
+    <input type="submit" value="提交">
+</form>
+</body>
 ```
 
 * 后端开发
+
+```java
+@WebServlet("/fileUpload")
+@MultipartConfig
+public class FileUploadServlet extends HttpServlet {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String username = request.getParameter("username");
+        System.out.println("username=" + username);
+
+
+        Part part = request.getPart("img");
+
+        //获取真实文件名称
+        String header = part.getHeader("content-disposition");
+
+        System.out.println(header);
+
+        String realFileName = header.substring(header.indexOf("filename=")+10,header.length()-1);
+
+        System.out.println("realFileName=" + realFileName);
+
+        //获取真实的文件内容
+        InputStream is = part.getInputStream();
+
+        //WEB-INF目录外界不能直接访问，如果文件机密性强则放这里
+        //String dir = this.getServletContext().getRealPath("/WEB-INF/file");
+
+        String dir = this.getServletContext().getRealPath("/file");
+
+        File dirFile = new File(dir);
+
+        //如果目录上不存在，则创建
+        if (!dirFile.exists()){
+            dirFile.mkdirs();
+        }
+
+        String uniqueName = UUID.randomUUID() + realFileName;
+
+        //文件流拷贝
+//        File file = new File(dir,realFileName);
+
+        File file = new File(dir, uniqueName);
+
+        FileOutputStream out = new FileOutputStream(file);
+
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = is.read(buf)) != -1){
+            out.write(buf,0,len);
+        }
+        out.close();
+        is.close();
+        //图片访问
+        request.getRequestDispatcher("/file/" + uniqueName).forward(request,response);
+    }
+}
+```
 
 
 
