@@ -13,7 +13,7 @@
 <body>
 
 <form action="/ModifyServlet" method="post">
-    <p>请输入要修改的学生的姓名:<input type="text" name="deleteName"></p>
+    <p>请输入要修改的学生的姓名:<input type="text" name="ModifyName"></p>
     <p><input type="submit" value="提交"></p>
 </form>
 

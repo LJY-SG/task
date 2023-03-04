@@ -15,7 +15,7 @@ public class DeleteServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        resp.setHeader("Content-type","text/html;charset=utf-8");
         req.setCharacterEncoding("UTF-8");
         BufferedReader br = new BufferedReader(new FileReader("E:\\itcase\\kk.txt"));
 
@@ -43,11 +43,13 @@ public class DeleteServlet extends HttpServlet {
         }
 
         int count = 0;
+        boolean flag = false;
         //遍历集合
         for (Student s : array){
             if (s.getName().equals(req.getParameter("deleteName"))){
                 array.remove(count);
                 count = 0;
+                flag = true;
                 break;
             }
             count++;
@@ -62,6 +64,11 @@ public class DeleteServlet extends HttpServlet {
             bw.flush();
         }
 
-        req.getRequestDispatcher("/index.jsp").forward(req,resp);
+        if (flag) {
+            resp.getWriter().write("删除成功");
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
+        }else {
+            resp.getWriter().write("删除失败");
+        }
     }
 }

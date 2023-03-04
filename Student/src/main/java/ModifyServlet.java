@@ -16,6 +16,7 @@ public class ModifyServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        resp.setHeader("Content-type","text/html;charset=utf-8");
         req.setCharacterEncoding("UTF-8");
         BufferedReader br = new BufferedReader(new FileReader("E:\\itcase\\kk.txt"));
 
@@ -43,11 +44,13 @@ public class ModifyServlet extends HttpServlet {
         }
 
         int count = 0;
+        boolean flag = false;
         //遍历集合
         for (Student s : array){
-            if (s.getName().equals(req.getParameter("name"))){
+            if (s.getName().equals(req.getParameter("ModifyName"))){
                 array.remove(count);
                 count = 0;
+                flag = true;
                 break;
             }
             count++;
@@ -62,8 +65,12 @@ public class ModifyServlet extends HttpServlet {
             bw.flush();
         }
 
-        //重新添加学生信息
-        req.getRequestDispatcher("/add.jsp").forward(req,resp);
+        if (flag) {
+            //重新添加学生信息
+            req.getRequestDispatcher("/add.jsp").forward(req, resp);
+        }else {
+            resp.getWriter().write("修改失败");
+        }
 
     }
 }
