@@ -47,16 +47,39 @@ JDBC概念：
 
 ![image-20230205205048017](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230205205048017.png)
 
+
+
+<img src="C:%5CUsers%5CAdministrator%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230306201824455.png" alt="image-20230306201824455" style="zoom:200%;" />
+
 JDBC 本质：
 
 * 官方（sun公司）定义的一套操作所有关系型数据库的规则，即接口
 * 各个数据厂商去实现这套接口，提供数据库驱动jar包
 * 我们可以使用这套接口（JDBC）编程，真正执行的代码是驱动jar包中的实现类
+* 提供了一种接口基准，可以构建更高级的工具和接口，使数据库开发人员能够编写数据库应用程序
+* 应用程序一般不能直接访问数据库，需要通过相应的数据库驱动程序才行
 
 JDBC 好处：
 
 * 各数据库厂商使用相同的接口，Java代码不需要针对不同数据库分别开发
 * 可随时替换底层数据库，访问数据库的Java代码基本不变
+
+
+
+* JDBC连接mysql相关概念
+  * 数据库驱动：不同数据库开发商(比如Oracle mysql等)为了某一种开发语言能够实现统一的数据库调用而开发的一个程序，作用相当于一个翻译人员，将某个语言(比如java)中对数据库的调用通过这个翻译成各个种类的数据库，自己的数据库语言
+  * Connection连接：特定数据库的连接(会话)，在连接上下文中执行sql语句并返回结果
+  * Statement 语句：创建执行SQL语句的statement，有好几种实现类，用于执行对应的sql
+  * ResultSet结果集：SQL查询返回的结果信息
+
+
+
+* 使用java连接MYSQL数据库的步骤
+  * 加载JDBC驱动程序
+  * 建立数据库连接Connection
+  * 创建执行SQL的语句Statement
+  * 处理执行结果ResultSet
+  * 释放连接资源
 
 
 
@@ -350,7 +373,7 @@ xxx:数据类型;如: int getlnt(参数);String getString(参数)
 
 ```
 //循环判断游标是否是最后一行末尾
-while(rs.next()
+while(rs.next())
 //获取数据
 rs.getXxx(参数);
 }
@@ -441,6 +464,10 @@ rs.getXxx(参数);
 * SQL注入
 
   * SQL注入是通过操作输入来修改事先定义好的SQL语句，用以达到执行代码对服务器进行攻击的方法
+  * 可以执行恶意SQL语句，将任意SQL代码插入数据库查询，使用SQL注入来添加、修改和删除数据库中的记录
+
+
+
 
 * PreparedStatement原理：
 
@@ -467,6 +494,65 @@ rs.getXxx(参数);
   3. 如果sql模板一样，则只需要进行一次检查、编译
 
 ![image-20230206221757832](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230206221757832.png)
+
+
+
+### 1.3.6 JDBC控制MYSQL事务
+
+* 事务：
+  * 一个最小的不可再分的工作单元，通常一个事务对应一个完整的业务
+  * 例如银行账户转账业务，该业务就是一个最小的工作单元
+* 四大特性：
+  * 原子性(A)：事务是最小单位，不可考核
+  * 一致性(C)：事务要求所有的DML语句操作的时候，必须保证同时成功或者同时失败
+  * 隔离性(I)：事务A和事务B之间具有隔离性
+  * 持久性(D)：是事务的保证，事务终结的标志(内存的数据持久到硬盘文件中)
+
+
+
+* 事务的一些术语：
+  * 开启事务：Start Transaction
+  * 事务结束：End Transaction
+  * 提交事务：Commit Transaction
+  * 回滚事务：Rollback Transaction
+
+```
+//建立数据库连接
+ConnectionString username s "root";
+String password = "xdclass.net";
+//协议:子协议://ip:端口/数据库名称?参数1=值16参数2=值2
+String url = "jdbc:mysgl://127.0.0,1:3306/xd web7useUnicode=trueacharacterEncoding=utf-8&useSSL=false";
+
+Connection connection = DriverManagergetConnection(url, username, password);
+
+try( 
+Preparedstatement psl = connection.preparestatement("insert into user(username,pwd) value(?,?)");
+Preparedstatement ps2 = connection.preparestatement("insert into user(username, pwd) value(?,?)")){
+
+//JDBC中默认事务是自动提交的，false就不会自动提交
+psl.setstring("tranc ps 1二当家小D”);
+ps1.setstring("123456");
+
+ps2. setstring("tranc ps 2二当家小D“);
+ps2. setstring("123456");
+
+psl.execute();
+
+ps2.execute);
+
+} catch (Exception e) {
+e.printstackTrace();
+
+//事务回滚
+connection.rollback();
+} finally {
+//事务提交
+connection.commit();
+connection.close();
+}
+```
+
+
 
 
 
@@ -762,17 +848,30 @@ Maven提供了一套标准化的项目结构，所有IDE使用Maven构建的项�
 ![image-20230208125557627](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230208125557627.png)
 
 * 仓库分类：
-  * 本地仓库：自己计算机上的一个目录
+  * 本地仓库：自己计算机上的一个目录 .m2/repository/
   * 中央仓库：由Maven团队维护的全球唯一的仓库
     * 地址：https://repo1.maven.org/maven2/
   * 远程仓库(私服)：一般由公司团队搭建的私有仓库
+    * 中央仓库
+    * 私服
 
 ![image-20230208145929177](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230208145929177.png)
+
+
+
+* 添加依赖包后
+  * maven检查 pom.xml文件
+  * 确定哪些依赖下载
+  * 第一步：Maven 将从本地资源库获得 Maven 的本地资源库依赖资源
+  * 第二步：如果没有找到，然后把他会从默认的 Maven 中央存储库
+
+<img src="C:%5CUsers%5CAdministrator%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230308162923287.png" alt="image-20230308162923287" style="zoom:200%;" />
+
+
 
 * 当项目中使用坐标引入对应依赖jar包后，首先会查找本地仓库中是否有对应的jar包：
   * 如果有，则在项目直接引用；
   * 如果没有，则去中央仓库下载对应的jar包到本地仓库
-
 * 还可以搭建远程仓库，将来jar包的查找顺序则变为
   * 本地仓库 —> 远程仓库—> 中央仓库
 
@@ -780,23 +879,58 @@ Maven提供了一套标准化的项目结构，所有IDE使用Maven构建的项�
 
 ## 2.3 Maven基本使用
 
-### 2.3.1 Maven 常用命令
+### 2.3.1 Maven 常用命令以及目录结构
 
-* compile：编译
-* clean：清理
-* test：测试
-* package：打包
-* install：安装
+* src
+  * main
+    * java - java文件
+    * resource - 资源库
+    * webapp
+      * WEB-INF
+        * index.jsp
+      * css、js、html等静态文件
+  * test
+    * java - java测试文件
+    * resource - 测试资源库
+* target：存放项目构建后的文件和目录，比如jar包，war包，编译的class文件等
+
+
+
+* Maven常用命令
+  * compile：编译
+  * clean：清理项目
+  * test：测试
+  * package：打包项目
+  * mvn dependency:tree 线上maven依赖树
+  * install：安装项目到本地仓库
+  * install 和 package的区别
+    * Maven package只是把包打在自己的项目下
+    * maven install 会把包打在maven本地仓库下，可以给依赖他的其他项目调用
+* maven常用参数
+  * -D 指定参数，-Dmaven.test.skip=true 跳过单元测试
+    * maven install -Dmaven.test.skip=true  
+  * -p 指定profile配置，用于区分环境
+* web项目命令
+  * mvn tomcat:run  启动Tomcat
 
 
 
 ### 2.3.2 Maven生命周期
+
+* 对所有的构建过程进行抽象和统一，包括项目清理、初始化、编译、测试、打包、验证和部署等几乎全部步骤
 
 * Maven构建项目生命周期描述的是一次构建过程经历了多少个事件
 * Maven对项目构建的生命周期划分为三套
   * clean：清理工作
   * default：核心工作，例如编译，测试，打包，安装等
   * site：产生报告，发布站点等
+* 三个标准生命周期：
+  * clean 清理项目
+  * build 构建处理项目
+    * 验证 validate -> 编译 compile -> 测试 Test -> 包装package -> 检查 verify -> 安装 install -> 部署 deploy
+  * site项目文档创建处理
+
+
 
 ![image-20230208165121166](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230208165121166.png)
 
@@ -852,6 +986,68 @@ Maven提供了一套标准化的项目结构，所有IDE使用Maven构建的项�
 ![image-20230208221317877](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230208221317877.png)
 
 * <scope>默认值：compile
+
+
+
+2.3.7 Maven核心配置文件pom.xml
+
+* pom.xml文件 
+
+  全称：Project Object Model，项目对象模型，是一个XML文件，包含了项目的基本信息，用于描述项目如何构建，声明项目依赖等
+
+* 一个基础的pom文件
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <!-- 模型版本 -->
+  <modelVersion>4.0.0</modelVersion>
+
+ <!-- 公司或组织得唯一标志，一般是网站名称反过来写 -->
+  <groupId>org.example</groupId>
+  
+   <!-- 项目的唯一ID，一个groupId下面可能多个项目，就是靠artfactId来区分的 -->
+  <artifactId>web02</artifactId>
+  
+   <!-- 项目版本号 -->
+  <version>1.0-SNAPSHOT</version>
+  
+   <!-- 项目打包形式，常见的是war、jar -->
+  <packaging>war</packaging>
+  
+   <!-- 项目名称 -->
+   <name>xd_video</name>
+   
+    <!-- 项目描述 -->
+	<description>Demo project for Spring Boot</description>
+    
+     <!-- 依赖 -->
+<dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+</dependencies>
+```
+
+* 依赖查找地址：https://mvnrepository.com/
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2280,7 +2476,7 @@ request.getRequestDispatcher("/index.jsp").forward(request,response);
   * 存在这样的问题，既然无状态，那完成一套完整的业务逻辑，需要发送多次请求，那么怎么标识这些请求都是同个浏览器操作呢？
   * cookie 和 session 都是为了弥补http协议的无状态特性，对servlet端来说无法知道两次http请求是否来自同一个用户，利用cookie 和 session就可以让server端知道多次http请求是否来自同一个用户
 
-
+ 
 
 * 生成和使用流程（和Cookie知识点一样，两者互相配合）
   * 浏览器第一次发送request请求到服务器，服务器除了返回请求的response之外，还给请求分配一个唯一标识sessionid 和 response一并返回给浏览器
@@ -2994,45 +3190,824 @@ public class FileUploadServlet extends HttpServlet {
 
 
 
+12.2 javaweb文件下载
+
+* javaweb文件下载
+  * 网站下载文件，这块也是很常用的，javaweb如何实现文件下载呢？
+  * 只需通过超链接即可实现，就是通过超链接，在连接地址里写上文件的路径，浏览器会自动打开该文件
+  * 普通的文本，图片等浏览器能直接显示内容的浏览器都能直接打开并显示
+  * 如果是浏览器无法打开的文件，比如exe等浏览器就会提示你下载改文件或者使用当前系统自带的工具打开该文件
+* 后端开发
+  * 客户端发送请求给服务端告诉服务端需要下载的文件，服务端读取该文件转换为输入流，在通过outputstream响应给客户端，需要设置response的头信息
+
+```
+@WebServlet("/download")
+public class FileDownloadServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        //客户端传递需要下载的文件名
+        String file = req.getParameter("file");
+
+        //获取图片在项目中的路径
+        String path = req.getServletContext().getRealPath("/file/");
+
+        String filepath = path + file;
+
+        FileInputStream fis = new FileInputStream(filepath);
+
+        resp.setCharacterEncoding("UTF-8");
+
+        //指明响应的配置信息，包含附件
+        resp.setHeader("Content-Disposition","attachment; filename=" + file);
+
+        //如果文件包含中文名称，需要进行编码转换
+//        resp.setHeader("Content-Disposition","attachment; filename=" + new String(file.getBytes("gb2312"),"ISO-8859-1"));
+
+        ServletOutputStream out = resp.getOutputStream();
+
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = fis.read(buf)) != -1){
+            out.write(buf,0,len);
+        }
+        out.close();
+    }
+}
+```
+
+
+
+* 前端开发
+
+```
+
+```
+
+
+
+# 13 javaweb三层目录结构和MVC知识
+
+## 13.1 Model-视图View-控制器Controllor模型
+
+* 什么是MVC
+  * Model 模型
+    * 承载数据用的Bean，即java对象，比如实体类User/Order，或者Service、Dao层对象
+  * View 视图
+    * 页面比如jsp，为用户提供使用界面，与用户直接进行交互
+  * Conrollor 控制器
+    * 将用户请求转发给相应的 Model 进行处理，并根据 Model 的计算结果向用户提供相应响应，比如Servlet、Controller等
+
+<img src="C:%5CUsers%5CAdministrator%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230306124910828.png" alt="image-20230306124910828" style="zoom:200%;" />
+
+
+
+## 13.2 三层结构
+
+* 三层结构
+  * 软件包划分：
+    * 分别完成不同的功能
+    * 降低各层的耦合度，在三层架构程序设计中，采用面向抽象编程
+    * 上层对下层的调用，是通过接口实现的
+    * 下层对上层的真正服务提供者，是下层接口的实现类
+  * 视图层 View也叫web层
+    * 接收用户提交请求的代码
+  * 服务层 Service
+    * 系统的业务逻辑
+  * 持久层 Dao
+    * 操作数据库的代码
+
+![image-20230306130530177](C:%5CUsers%5CAdministrator%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230306130530177.png)
+
+<img src="C:%5CUsers%5CAdministrator%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230306130638227.png" alt="image-20230306130638227" style="zoom:200%;" />
+
+
+
+## 13.3 src目录结构
+
+<img src="C:%5CUsers%5CAdministrator%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230306132637203.png" alt="image-20230306132637203" style="zoom:200%;" />
+
+
+
+* controller放servlet文件
+* service放一些接口和实现类
+* dao放数据库操作代码
+
+
+
+# 15 数据库操作和池化思想
+
+## 15.1 数据库工具类自定义DButils封装
+
+简介：自定义DButils工具类封装
+
+* 优化JDBC操作，提高效率
+
+* javaweb项目中，使用JDBC需要添加mysql启动到Tomcat里面
+
+```
+@WebServlet("/jdbc")
+public class TestJDBCServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String instr = req.getParameter("id");
+        int id = Integer.parseInt(instr);
+        try {
+            Connection connection = CustomDBUtils.getConnection();
+            PreparedStatement ps = connection.prepareStatement("select * from jdbc.user where id = ?");
+            ps.setInt(1, id);
+            ResultSet resultSet = ps.executeQuery();
+
+            while (resultSet.next()) {
+                System.out.println("名字:" + resultSet.getString("name") + "微信号:" + resultSet.getString("wechat"));
+            }
+            CustomDBUtils.close(resultSet, ps, connection);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+```
+
+```java
+public class CustomDBUtils {
+    private static String url ;
+    private static String username ;
+    private static String password ;
+    private static String driver ;
+
+    static {
+        try {
+            //使用类加载器获取当前类路径
+            //获取类加载器对象
+//            ClassLoader classLoader = CustomDBUtils.class.getClassLoader();
+//            //通过类加载器的getResource()找到指定名称的资源
+//            URL resource = classLoader.getResource("db.properties");
+//            String path = resource.getPath();
+
+            Properties properties = new Properties();
+
+            properties.load(CustomDBUtils.class.getClassLoader().getResourceAsStream("db.properties"));
+
+            url = properties.getProperty("url");
+            username = properties.getProperty("username");
+            password = properties.getProperty("password");
+            driver = properties.getProperty("driver");
+
+            //加载JDBC驱动程序
+            Class.forName(driver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取连接
+     * @return
+     * @throws Exception
+     */
+    public static Connection getConnection() throws Exception {
+        return DriverManager.getConnection(url, username, password);
+    }
+
+    /**
+     * 关闭数据库资源
+     * @param resultSet
+     * @param ps
+     * @param connection
+     */
+    public static void close(ResultSet resultSet, PreparedStatement ps, Connection connection) {
+        try {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }catch (SQLException e){
+            throw new RuntimeException();
+        }
+    }
+}
+```
+
+```properties
+url=jdbc:mysql://127.0.0.1:3306/jdbc?useUnicode=true&characterEncoding=UTF-8&userSSL=false&serverTimezone=GMT%2B8
+username=root
+password=ljy040226
+driver=com.mysql.jdbc.Driver
+```
 
 
 
 
 
+## 15.2 数据库连接池化思想
+
+* 为什么要用连接池
+  * 数据库建立Connection比较耗时，频繁的创建和释放连接引起的大量性能开销
+  * 如果数据库连接得到重用，避免这些开销，也提高了系统稳定
+  * 数据库连接池在初始化过程中，往往已经创建了若干数据库连接置于池中备用，对于业务请求处理而言，直接利用现有可用连接，缩减了系统整体响应时间
+  * 统一的连接管理，缩减了系统整体响应时间
+* 同类对比其他池化思想
+  * java线程池
+  * Tomcat连接池
+  * 对象池(SpringIOC容器)
 
 
 
+## 15.3 常见的DB工具类和数据库连接池
+
+* 数据库工具类：Apache comments dbutils
+  * Apache 组织提供的一个开源JDBC工具库，它是对JDBC的简单封装，能极大简化jdbc编码的工作量，同时也不会影响程序的性能
+  * 地址：https://commons.apache.org/proper/commons-dbutils/
+  * 导入
+    * 可以添加到Tomcat的lib包
+    * 可以添加到web-inf的lib包
+
+```
+<dependency>
+	<groupId>commons-dbutils</groupId>
+	<artifactId>commons-dbutils</artifactId>
+	<version>1.6</version>
+</dependency>
+
+<dependency>
+	<groupId>com.mchange</groupId>
+	<artifactId>c3p0</artifactId>
+	<version>0.9.5.2</version>
+</dependency>
+```
 
 
 
+* 数据库连接池：c3p0、druid、dbcp
+  * dbcp：全称 DataBase connection pool，数据库连接池是 apache 上的一个java连接项目
+  * 地址：http://commons.apache.org/proper/commons-dbcp
+
+```java
+<dependency>
+     <groupId>mysql</groupId>
+     <artifactId>mysql-connector-java</artifactId>
+     <version>8.0.22</version>
+ </dependency>
+ <dependency>
+     <groupId>commons-dbcp</groupId>
+     <artifactId>commons-dbcp</artifactId>
+     <version>1.4</version>
+ </dependency>
+ <dependency>
+     <groupId>commons-pool</groupId>
+     <artifactId>commons-pool</artifactId>
+     <version>1.6</version>
+ </dependency>
+```
 
 
 
+# 16 数据库连接池和Apache DBUtils实战
+
+## 16.1 数据库连接池
+
+简介：Apache dbcp数据库连接池封装DataSourceUtils实战
+
+* 配置：
+
+```java
+driverClassName = com.mysql.jdbc.Driver
+url=jdbc:mysql://127.0.0.1:3306/jdbc?useUnicode=true&characterEncoding=UTF-8&userSSL=false&serverTimezone=GMT%2B8
+username=root
+password=ljy040226
+
+initialSize=2     //连接池建立时创建的连接的数量
+maxActive=15	//连接池同一时间内最多能够分配的活动连接的数量
+```
+
+* 工具类开发
+
+```java
+/**
+ * 数据库连接池工具类
+ */
+public class DataSourceUtil {
+
+    private static DataSource dataSource;
+
+    static {
+
+        try{
+            InputStream in = DataSourceUtil.class.getClassLoader().getResourceAsStream("database.properties");
+            Properties p = new Properties();
+            p.load(in);
+
+            dataSource = BasicDataSourceFactory.createDataSource(p);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            throw  new ExceptionInInitializerError("初始化DBPC失败");
+        }
+    }
+
+    public static DataSource getDataSource(){
+        return dataSource;
+    }
+}
+```
 
 
 
+## 16.2 Apache dbutils工具快速入门实战
+
+* DbUtils 中的核心类/接口
+  * QueryRunner
+    * 查询执行器，提供对sql语句操作的API
+    * update(String sql,Object...params)可执行 增-INSERT、 删-DELETE、 改-UPDATE
+    * query(String sql,ResultSetHandler<T> rsh,Object...params) 可执行查询-SELECT
+  * ResultSetHandler
+    * 结果集处理类，执行处理一个结果集对象，将数据转变并处理为任何一种形式
+      * BeanHandler 结果集中的第一行数据封装到一个对应的javaBean实例
+      * BeanListHandler 结果集中的每一行数据都封装到一个对应的javaBean实例中，存放到List里
+      * MapHandler 结果集中的第一行数据封装到一个Map里，key是列名，value就是对应的值
+      * MapListHandler 结果集中的每一行数据都封装到一个Map里，然后再存放到List
+      * ScalarHandler 结果集中第一行数据指定列的值，常用来进行单值查询
 
 
 
+* 例子：
+
+```java
+QueryRunner queryRunner = new QueryRunner(DataSourceUtils.getDataSource());
+
+public User findById(int id){
+    String sql = "select * from user where id = ?";
+    User user = null;
+    try {
+        user = queryRunner.query(sql,new BeanHandler<>(User.class.processor,id));
+    }catch(SQLException e){
+        e.printStackTrace();
+    }
+    return user;
+}
+```
 
 
 
+## 16.3 BeanHandler和BeanListHandler多个结果集处理实战
+
+导入依赖：
+
+```java
+<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+		</dependency>
+    
+<dependency>
+   <groupId>org.apache.commons</groupId>
+   <artifactId>commons-pool2</artifactId>
+   <version>2.4.2</version>
+</dependency>
+```
 
 
 
+```java
+    private static DataSource dataSource = null;
+    static {
+
+        try{
+            InputStream in = DataSourceUtil.class.getClassLoader().getResourceAsStream("database.properties");
+            Properties p = new Properties();
+            p.load(in);
+            dataSource = BasicDataSourceFactory.createDataSource(p);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ExceptionInInitializerError("初始化DBCP失败,请检查配置文件");
+        }
+    }
+    public static DataSource getDataSource(){
+        return dataSource;
+    }
+```
 
 
 
+* BeanHandler：结果集中的第一行数据封装到一个对应的JavaBean实例
+
+```
+
+```
 
 
 
+* 开启驼峰映射：数据库字段映射java类
+
+```java
+    private QueryRunner queryRunner = new QueryRunner(DataSourceUtil.getDataSource());
+
+    //开启驼峰映射
+    private BeanProcessor bean = new GenerousBeanProcessor();
+    private RowProcessor processor = new BasicRowProcessor(bean);
+
+    public User findById(int id){
+
+        String sql = "select * from jdbc.user where id = ?";
+
+        User user = null;
+        try {
+            user =  queryRunner.query(sql,new BeanHandler<>(User.class),id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    public List<User> list(){
+        String sql = "select * from jdbc.user";
+        List<User> list = null;
+        try {
+            list =  queryRunner.query(sql,new BeanListHandler<>(User.class));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+```
 
 
 
+* BeanListHandler：结果集中的每一行数据都封装到一个对应的javaBean实例中，存放到List里
+
+```java
+    public List<User> list(){
+        String sql = "select * from jdbc.user";
+        List<User> list = null;
+        try {
+            list =  queryRunner.query(sql,new BeanListHandler<>(User.class));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+```
+
+DataSourceUtils、UserDao、UserService、database.properties
 
 
 
+## 16.4 MapHandler和ScalarHandler结果处理集实战
+
+* MapHandler：结果集中的第一行数据封装到一个Map里，key是列名，value就是对应的值
+
+```
+    public Map<String,Object> findByIdWithMap(int id){
+        String sql = "select * from jdbc.user where id = ?";
+
+        Map<String,Object> map = null;
+        try {
+            map =  queryRunner.query(sql,new MapHandler(),id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+    
+    
+            if (method.equals("findByIdWithMap")){
+            String idStr = req.getParameter("id");
+            int userId = Integer.parseInt(idStr);
+
+            Map<String,Object> map = userService.findByIdWithMap(userId);
+            System.out.println(map.toString());
+        }
+```
 
 
 
+* MapListHandler：结果集中的每一行数据都封装到一个Map里，然后再存放到List
+
+```
+    public List<Map<String,Object>> listWithMap(){
+        String sql = "select * from jdbc.user where id = ?";
+
+        List<Map<String,Object>> list = null;
+        try {
+            list =  queryRunner.query(sql,new MapListHandler());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    
+            if (method.equals("listWithMap")){
+            List<Map<String,Object>> list = userService.listWithMap();
+            System.out.println(list.toString());
+        }
+```
+
+
+
+* ScalarHandler：结果集中第一行数据指定列的值，常用来进行单值查询
+
+```java
+    public int countUser(){
+        String sql = "select count(*) from jdbc.user";
+
+        Long count = null;
+
+        try{
+            count = (Long) queryRunner.query(sql,new ScalarHandler<>());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return count.intValue();
+    }
+    
+    
+            if (method.equals("count")){
+            int total = userService.countUser();
+
+            System.out.println("user表行数 ="+total);
+        }
+```
+
+
+
+## 16.5 QueryRunner新增update语法实战
+
+* update新增
+
+```java
+    public int save(User user){
+        String sql = "insert into jdbc.user (name,wechat) values (?,?)";
+
+        Object [] params = {
+                user.getName(),
+                user.getWechat()
+        };
+        int i = 0;
+        try {
+            i = queryRunner.update(sql,params);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return i;
+    }
+    
+            if (method.equals("save")){
+            User user = new User();
+            user.setName("老王");
+            user.setWechat("222222");
+
+            int row = userService.save(user);
+            System.out.println("row="+row);
+            if (row == 1){
+                System.out.println("插入成功");
+            }else {
+                System.out.println("插入失败");
+            }
+        }
+```
+
+
+
+# 17 互联网公司软件开发流程
+
+## 17.1 概述
+
+* 软件开发流程
+  * 需求分析
+  * 设计
+    * UI设计
+    * 架构设计
+  * 开发
+    * 前端开发
+    * 后端开发
+  * 测试
+    * 功能测试
+    * 性能测试
+    * 安全测试
+  * 上线
+    * 预发布环境
+    * 灰度
+    * 全量
+  * 多次迭代更新
+
+
+
+## 17.2 小滴课堂开发者论坛效果演示和需求分析
+
+* 演示功能，后续开发不演示功能
+* 分类列表功能
+* 主题列表功能-分页
+* 主题详情功能-分页
+* 注册登录
+* 回复盖楼功能
+* 练手项目，从javaweb基础整合进阶，学完再继续跟着路线学习综合项目
+
+
+
+# 18 javaweb项目实战之小滴课堂开发者论坛数据库设计
+
+## 18.1 小滴课堂开发者论坛数据库ER关系图设计
+
+* 什么是ER图
+  * 实体关系图，是一种提供了实体，属性和联系的方法，用来描述现实世界的概念模型
+* 实体
+  * 现实世界中的对象，可以具体到人、事、物，比如学生、教师、商品、订单、主题、菜单等
+  * ER图里面 用矩形表示，矩形框内写明实体名
+* 属性
+  * 实体所具有的一个特性称为属性，在E-R图中属性用来描述实体，比如商品实体，有标题、价格、图片等属性
+  * ER图里面用椭圆形或圆角矩形表示、并用无向边将其与相应的实体连接起来
+* 关系
+  * 任何事物都不是孤立存在的，事物内部和事物之间都有了联系的，实体之间的联系通常有3种类型：一对一联系，一对多联系，多对多联系：比如商品和订单的关系、班级和学生的关系、主题和评论的关系
+  * ER图里用菱形表示，菱形框内写明联系名，并用无向边分别与有关实体联系起来
+    * 1对1关系在两个实体连线方向写1：
+    * 1对多关系在1的一方写1，多的一方写N：
+    * 多对多关系则是在两个实体连线方向各写N,M
+
+<img src="C:%5CUsers%5CAdministrator%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230308214845942.png" alt="image-20230308214845942" style="zoom:200%;" />
+
+
+
+## 18.2 小滴课堂开发者论坛数据库设计
+
+* cateogry分类表
+
+```
+CREATE TABLE `category`(
+`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+`name` varchar(128) DEFAULT NULL,
+`weight`~ int(11) DEFAULT NULL,
+`create_time` datetime DEFAULT NULL,
+PRIMARY KEY (`id`),
+)ENGINE=InNODB AUTO_INCREMENT=5 DEFAULT CHARSET-utf8mb4;
+```
+
+
+
+* topic主题表
+
+```
+CREATE TABLE`topic` (
+`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+`c_id` int(11) DEFAULT NULL COMMENT `分类`,
+`title` varchar(128) DEFAULT NULL COMMENT `标题`,
+`content` varchar(1024) DEFAULT NULL COMMENT `内容,`
+`pv` int(11) DEFAULT NULL COMMENT `浏览量`,
+`user_id` int(11) DEFAULT NULL,
+`username` varchar(64) DEFAULT NULL,
+`user_img` varchar(128) DEFAULT NULL,
+`create_time` datetime DEFAULT NULL,
+`update_time` datetime DEFAULT NULL,
+`hot` int(2) DEFAULT '0' COMMENT '是否热门 1是热门',
+`delete` int(11) DEFAULT 'O' COMMENT '0是未删除，1是一件删除',
+PRIMARY KEY (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+```
+
+
+
+* User表
+
+```
+CREATE TABLE user (
+`id` int(11) unsigned NOT NULL AUTO_INCRENENT
+`phone` varchar(32) DEPAULT NULL,
+`pwd` varehar(128) DEFAULT NULL,
+`sex` int(2) DEFAULT NULL,
+`img` varchar(128) DEFAULT NULL,
+`create_time` datetime DEFAULT NULL,
+`role` int(11) DEFAULT NULL COMMENT '1是普通用户，2是管理员',
+`username` varchar(128) DEFAULT NULL,
+PRIMARY KEY (`id`)
+) ENGINE-INNODB AUTO_INCREMENT=1 DEFAULT CHARSET-utf8mb4:
+```
+
+
+
+* reply表
+
+```
+`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+`topic_id` int(11) DEFAULT NULL,
+`floor` int(11) DEFAULT NULL COMMENT '楼层编号，回复是不能删除的',
+`content` varchar(524) DEFAULT NULL COMMENT '回复内容',
+`user_id` int(11) DEFAULT NULL,
+'username' varchar(64) DEFAULT NULL COMMENT '回复人名称' ,
+'user_img' varchar(128) DEFAULT NULL COMMENT '回复人头像',
+`create time` datetime DEFAULT NULL,
+`update_time` datetime DEFAULT NULL,
+`delete` int(11) DEFAULT NULL COMMENT '0是正常，1是禁用'
+```
+
+
+
+# 19 Maven3x创建小滴课堂开发者论坛项目和配置tomcat
+
+## 19.1 项目配置
+
+* 简介:IDEA+Maven3x创建javaweb项目配置tocmat9
+
+  * 创建Maven3.x +Javaweb项目
+
+  * 提高创建速度，会在本地优先查找资源，本地找不到再去下载
+
+    Name: archetypeCatalog
+
+    Value : internal
+
+  * 如何导入课程项目
+
+
+
+## 19.2 开发者论坛maven依赖包和基础实体类开发
+
+* maven依赖包添加
+
+```xml
+  <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-web-api</artifactId>
+      <version>7.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>javax.servlet.jsp-api</artifactId>
+      <version>2.3.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>4.0.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.32</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-dbutils</groupId>
+      <artifactId>commons-dbutils</artifactId>
+      <version>1.7</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
+      <version>1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-pool</groupId>
+      <artifactId>commons-pool</artifactId>
+      <version>1.6</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-pool2</artifactId>
+      <version>2.4.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.mchange</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>0.9.5.2</version>
+    </dependency>
+```
+
+* 包结构创建
+* 实体类开发
+* 工具类开发
+  * 连接池开发
+
+```xml
+    <!--专门用于打包配置文件到类路径-->
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.properties</include>
+          <include>**/*.xml</include>
+        </includes>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+```
 
