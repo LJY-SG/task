@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.BankController">
+   <children>
+      <TableView fx:id="table" layoutX="-2.0" layoutY="78.0" prefHeight="623.0" prefWidth="1000.0">
+        <columns>
+          <TableColumn fx:id="id" prefWidth="75.0" text="试题ID" />
+          <TableColumn fx:id="subject" prefWidth="75.0" text="试题科目" />
+            <TableColumn fx:id="type" prefWidth="75.0" text="题目类型" />
+            <TableColumn fx:id="title" prefWidth="373.0" text="题目" />
+            <TableColumn fx:id="tk" minWidth="0.0" prefWidth="61.0" text="填空" />
+            <TableColumn fx:id="choiceA" prefWidth="55.0" text="A选项" />
+            <TableColumn fx:id="choiceB" prefWidth="53.0" text="B选项" />
+            <TableColumn fx:id="choiceC" prefWidth="52.0" text="C选项" />
+            <TableColumn fx:id="choiceD" prefWidth="56.0" text="D选项" />
+            <TableColumn fx:id="difficulty" prefWidth="66.0" text="试题难度" />
+            <TableColumn fx:id="result" prefWidth="58.0" text="答案" />
+        </columns>
+      </TableView>
+      <Button fx:id="InsertBank" layoutX="105.0" layoutY="722.0" mnemonicParsing="false" onAction="#InsertBankOnAction" prefHeight="50.0" prefWidth="147.0" text="添加" textFill="#0505bf">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Button>
+      <Button fx:id="ModifyBank" layoutX="324.0" layoutY="722.0" mnemonicParsing="false" onAction="#ModifyBankOnAction" prefHeight="50.0" prefWidth="147.0" text="修改" textFill="#060add">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Button>
+      <Button fx:id="Return" layoutX="730.0" layoutY="722.0" mnemonicParsing="false" onAction="#ReturnOnAction" prefHeight="50.0" prefWidth="147.0" text="返回" textFill="#130fe8">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Button>
+      <Label layoutX="423.0" layoutY="14.0" prefHeight="50.0" prefWidth="127.0" text="试题库">
+         <font>
+            <Font size="39.0" />
+         </font>
+      </Label>
+      <Button fx:id="DeleteBank" layoutX="529.0" layoutY="722.0" mnemonicParsing="false" onAction="#DeleteBankOnAction" prefHeight="50.0" prefWidth="147.0" text="删除" textFill="#0505bf">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
