@@ -1,5 +1,6 @@
 package Controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -28,42 +29,32 @@ public class MenuController {
 
     @FXML
     void BankOnAction(ActionEvent event) {
-        Bank.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                URL url = getClass().getResource("Bank.fxml");//得到压缩器界面的url
-                Parent root = null;
-                try {
-                    root = FXMLLoader.load(url);//加载
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Scene scene = new Scene(root, 1000, 800);//建立一个与初始化界面一样大的界面
-                Stage stage = new Stage();
-                stage.initStyle(StageStyle.DECORATED);//该画面不能移动
-                stage.setScene(scene);
-                stage.show();//展示
+        Platform.runLater(() -> {
+            //获取按钮所在窗口
+            Stage primaryStage = (Stage) Bank.getScene().getWindow();
+            //当前窗口隐藏
+            primaryStage.hide();
+            //加载目标窗口
+            try{
+                new BankController().start(primaryStage);
+            }catch (Exception e){
+                e.printStackTrace();
             }
         });
     }
 
     @FXML
     void PaperOnAction(ActionEvent event) {
-        Paper.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                URL url = getClass().getResource("PaperSource.fxml");//得到压缩器界面的url
-                Parent root = null;
-                try {
-                    root = FXMLLoader.load(url);//加载
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Scene scene = new Scene(root, 621, 438);//建立一个与初始化界面一样大的界面
-                Stage stage = new Stage();
-                stage.initStyle(StageStyle.DECORATED);
-                stage.setScene(scene);
-                stage.show();//展示
+        Platform.runLater(() -> {
+            //获取按钮所在窗口
+            Stage primaryStage = (Stage) Paper.getScene().getWindow();
+            //当前窗口隐藏
+            primaryStage.hide();
+            //加载目标窗口
+            try{
+                new PaperSourceController().start(primaryStage);
+            }catch (Exception e){
+                e.printStackTrace();
             }
         });
 }
@@ -71,31 +62,26 @@ public class MenuController {
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("menu.fxml"));
         Scene scene = new Scene(root, 1000, 800);//建立一个与初始化界面一样大的界面
-//        primaryStage.initStyle(StageStyle.DECORATED);//该画面不能移动
+//        primaryStage.initStyle(StageStyle.DECORATED);
+        primaryStage.setTitle("主菜单");
         primaryStage.setScene(scene);
         primaryStage.show();//展示
     }
 
     @FXML
     void examOnAction(ActionEvent event) {
-        exam.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                URL url = getClass().getResource("exam.fxml");//得到压缩器界面的url
-                Parent root = null;
-                try {
-                    root = FXMLLoader.load(url);//加载
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Scene scene = new Scene(root, 1000, 800);//建立一个与初始化界面一样大的界面
-                Stage stage = new Stage();
-                stage.initStyle(StageStyle.DECORATED);//该画面不能移动
-                stage.setScene(scene);
-                stage.show();//展示
+        Platform.runLater(() -> {
+            //获取按钮所在窗口
+            Stage primaryStage = (Stage) exam.getScene().getWindow();
+            //当前窗口隐藏
+            primaryStage.hide();
+            //加载目标窗口
+            try{
+                new ExamController().start(primaryStage);
+            }catch (Exception e){
+                e.printStackTrace();
             }
         });
-
     }
 
 }

@@ -85,47 +85,32 @@ public class ExamController {
 
     @FXML
     void InsertExamOnAction(ActionEvent event) {
-        InsertExam.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-//                MenuApplication.changeView("menu.fxml");
-                URL url = getClass().getResource("InsertExam.fxml");//得到压缩器界面的url
-                Parent root = null;
-                try {
-                    root = FXMLLoader.load(url);//加载
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Scene scene = new Scene(root, 700, 600);//建立一个与初始化界面一样大的界面
-                Stage stage = new Stage();
-                stage.setTitle("添加考试表内容");
-                stage.initStyle(StageStyle.DECORATED);//该画面不能移动
-                stage.setScene(scene);
-                stage.show();//展示
+        Platform.runLater(() -> {
+            //获取按钮所在窗口
+            Stage primaryStage = (Stage) InsertExam.getScene().getWindow();
+            //当前窗口隐藏
+            primaryStage.hide();
+            //加载目标窗口
+            try{
+                new InsertExamController().start(primaryStage);
+            }catch (Exception e){
+                e.printStackTrace();
             }
         });
-
     }
 
     @FXML
     void ModifyExamOnAction(ActionEvent event) {
-        ModifyExam.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-//                MenuApplication.changeView("menu.fxml");
-                URL url = getClass().getResource("ModifyExam.fxml");//得到压缩器界面的url
-                Parent root = null;
-                try {
-                    root = FXMLLoader.load(url);//加载
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Scene scene = new Scene(root, 700, 600);//建立一个与初始化界面一样大的界面
-                Stage stage = new Stage();
-                stage.setTitle("修改考试表内容");
-                stage.initStyle(StageStyle.DECORATED);//该画面不能移动
-                stage.setScene(scene);
-                stage.show();//展示
+        Platform.runLater(() -> {
+            //获取按钮所在窗口
+            Stage primaryStage = (Stage) ModifyExam.getScene().getWindow();
+            //当前窗口隐藏
+            primaryStage.hide();
+            //加载目标窗口
+            try{
+                new ModifyExamController().start(primaryStage);
+            }catch (Exception e){
+                e.printStackTrace();
             }
         });
     }
@@ -149,7 +134,8 @@ public class ExamController {
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("exam.fxml"));
         Scene scene = new Scene(root, 1000, 800);//建立一个与初始化界面一样大的界面
-//        primaryStage.initStyle(StageStyle.DECORATED);//该画面不能移动
+//        primaryStage.initStyle(StageStyle.DECORATED);
+        primaryStage.setTitle("考试表");
         primaryStage.setScene(scene);
         primaryStage.show();//展示
     }

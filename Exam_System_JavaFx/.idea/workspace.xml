@@ -19,7 +19,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../../" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -30,27 +30,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "ToolWindowRun.ShowToolbar": "false",
-    "WebServerToolWindowFactoryState": "false",
-    "last_directory_selection": "E:/workspace/java/JavaFx/Exam_System_JavaFx/src/main/java/Controller",
-    "last_opened_file_path": "E:/workspace/java/JavaSE/Exam_System",
-    "mysql-explain.agentPath": "C:\\Users\\Administrator\\AppData\\Roaming\\JetBrains\\IntelliJIdea2022.1\\plugins\\mysql-explain-intellij-plugin\\lib\\mysql-explain-agent-1.0-jar-with-dependencies.jar",
-    "mysql-explain.existMysqlJar": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;ToolWindowRun.ShowToolbar&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_directory_selection&quot;: &quot;E:/workspace/java/JavaFx/Exam_System_JavaFx/src/main/java/Controller&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/workspace/java/JavaFx/Exam_System_JavaFx&quot;,
+    &quot;mysql-explain.agentPath&quot;: &quot;C:\\Users\\Administrator\\AppData\\Roaming\\JetBrains\\IntelliJIdea2022.1\\plugins\\mysql-explain-intellij-plugin\\lib\\mysql-explain-agent-1.0-jar-with-dependencies.jar&quot;,
+    &quot;mysql-explain.existMysqlJar&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="Controller" />
@@ -108,6 +108,10 @@
       <workItem from="1678895371315" duration="2089000" />
       <workItem from="1678942695700" duration="15927000" />
       <workItem from="1679027116940" duration="25909000" />
+      <workItem from="1679114882157" duration="706000" />
+      <workItem from="1679119377838" duration="934000" />
+      <workItem from="1679128015779" duration="69000" />
+      <workItem from="1679128391765" duration="1333000" />
     </task>
     <servers />
   </component>
@@ -136,11 +140,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/Controller/InsertPaperController.java</url>
           <line>128</line>
           <option name="timeStamp" value="53" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Controller/InsertBankController.java</url>
-          <line>75</line>
-          <option name="timeStamp" value="64" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

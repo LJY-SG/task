@@ -4,11 +4,16 @@ import Utils.JDBCUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,6 +48,15 @@ public class ModifyExamController {
 
     @FXML
     private Label fail;
+
+    public void start(Stage primaryStage) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("ModifyExam.fxml"));
+        Scene scene = new Scene(root, 700, 600);//建立一个与初始化界面一样大的界面
+//        primaryStage.initStyle(StageStyle.DECORATED);
+        primaryStage.setTitle("修改考试表");
+        primaryStage.setScene(scene);
+        primaryStage.show();//展示
+    }
 
     @FXML
     void ModifyExamOnAction(ActionEvent event) throws SQLException {

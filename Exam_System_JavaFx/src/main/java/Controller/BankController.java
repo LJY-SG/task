@@ -75,6 +75,17 @@ public class BankController {
     @FXML
     private TableColumn<bank, String> result;
 
+
+    public void start(Stage primaryStage) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("Bank.fxml"));
+        Scene scene = new Scene(root, 1000, 800);//建立一个与初始化界面一样大的界面
+//        primaryStage.initStyle(StageStyle.DECORATED);
+        primaryStage.setTitle("试题库");
+        primaryStage.setScene(scene);
+        primaryStage.show();//展示
+    }
+
+
     @FXML
     private void initialize() throws SQLException {
         getData();
@@ -162,26 +173,17 @@ public class BankController {
 
     @FXML
     void ReturnOnAction(ActionEvent event) {
-        Return.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-//                MenuApplication.changeView("menu.fxml");
-                URL url = getClass().getResource("Menu.fxml");//得到压缩器界面的url
-                Parent root = null;
-                try {
-                    root = FXMLLoader.load(url);//加载
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Scene scene = new Scene(root, 1000, 800);//建立一个与初始化界面一样大的界面
-                Stage stage = new Stage();
-                stage.setTitle("试题库");
-                stage.initStyle(StageStyle.DECORATED);//该画面不能移动
-                stage.setScene(scene);
-                stage.show();//展示
+        Platform.runLater(() -> {
+            //获取按钮所在窗口
+            Stage primaryStage = (Stage) Return.getScene().getWindow();
+            //当前窗口隐藏
+            primaryStage.hide();
+            //加载目标窗口
+            try{
+                new MenuController().start(primaryStage);
+            }catch (Exception e){
+                e.printStackTrace();
             }
         });
     }
-
-
 }

@@ -116,7 +116,7 @@ public class paper {
                 " 难度:" + difficulty  + "\n";
     }
 
-    
+
     //填空题输出形式
     public String toString2() {
         return
