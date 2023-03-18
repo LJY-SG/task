@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0e58b63c-b5d5-49c2-aec4-2d75817a4f95" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FileCopy.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exam_System/.idea/dataSources.local.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exam_System/.idea/dataSources/5a59386d-7177-41ec-acd9-8479541e40ab.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exam_System/.idea/dataSources/5a59386d-7177-41ec-acd9-8479541e40ab/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exam_System/.idea/dataSources/5a59386d-7177-41ec-acd9-8479541e40ab/storage_v2/_src_/schema/information_schema.FNRwLQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exam_System/.idea/dataSources/5a59386d-7177-41ec-acd9-8479541e40ab/storage_v2/_src_/schema/mysql.osA4Bg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exam_System/.idea/dataSources/5a59386d-7177-41ec-acd9-8479541e40ab/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exam_System/.idea/dataSources/5a59386d-7177-41ec-acd9-8479541e40ab/storage_v2/_src_/schema/sys.zb4BAA.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exam_System/.idea/dataSources/5a59386d-7177-41ec-acd9-8479541e40ab/storage_v2/_src_/schema/sys.zb4BAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exam_System/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exam_System_JavaFx/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Exam_System_JavaFx/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exam_System_JavaFx/src/main/java/domain/paper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Exam_System_JavaFx/src/main/java/domain/paper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Git&amp;GitHub学习笔记.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JAVA面试题.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JavaWeb学习笔记.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MySQL学习笔记.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java笔记：.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/Func.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/system.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/resources/druid.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/FuncTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../前端学习笔记.md" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2NAv5ZobRTpoeUJFuT6g0HZypKS" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "E:/workspace/java/JavaSE/FileCopy",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\workspace\java\JavaFx\FileCopy\src\main\resources\Controller" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="FileCopyApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Controller.FileCopyApplication" />
+      <module name="FileCopy" />
+      <option name="VM_PARAMETERS" value="-Djava.library.path=C:/" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Controller.FileCopyApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0e58b63c-b5d5-49c2-aec4-2d75817a4f95" name="Changes" comment="" />
+      <created>1679119521860</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1679119521860</updated>
+      <workItem from="1679119523858" duration="5676000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
