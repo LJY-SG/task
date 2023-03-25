@@ -26,6 +26,19 @@ public class JDBCUtil {
         }
     }
 
+    public static void DeleteTable(String TableName) throws SQLException {
+        //获取连接
+        Connection connection = getConnection();
+        //定义sql
+        String sql = "drop table if exists " + TableName;
+        //获取执行sql对象
+        PreparedStatement ps = connection.prepareStatement(sql);
+        //执行sql
+        ps.execute();
+        //关闭资源
+        closeAll(null,ps,connection);
+    }
+
     //查询数据库
     public static ResultSet SelectAll(String TableName) throws SQLException {
         //获取连接

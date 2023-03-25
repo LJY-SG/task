@@ -61,6 +61,10 @@ public class PaperSourceController {
         @FXML
         private Button EditPaper;
 
+
+        @FXML
+        private Button AutoInsert;
+
         public static List<PaperSource> paperSources = new ArrayList<>();
 
         public void start(Stage stage) throws IOException {
@@ -91,6 +95,7 @@ public class PaperSourceController {
                 paperSources.add(paperSource);
                 if (paperSource != null){
                         JDBCUtil.DeleteAll("PaperSource",paperSource.getId());
+                        JDBCUtil.DeleteTable(paperSource.getPaperName());
                         getData();
                 }
         }
@@ -113,6 +118,29 @@ public class PaperSourceController {
                         }
                 });
         }
+
+        @FXML
+        void AutoInsertOnAction(ActionEvent event) {
+                AutoInsert.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                                URL url = getClass().getResource("AutoInsert.fxml");//得到压缩器界面的url
+                                Parent root = null;
+                                try {
+                                        root = FXMLLoader.load(url);//加载
+                                } catch (IOException e) {
+                                        e.printStackTrace();
+                                }
+                                Scene scene = new Scene(root);//建立一个与初始化界面一样大的界面
+                                Stage stage = new Stage();
+                                stage.setTitle("自动出卷");
+                                stage.initStyle(StageStyle.DECORATED);//该画面不能移动
+                                stage.setScene(scene);
+                                stage.show();//展示
+                        }
+                });
+        }
+
 
         @FXML
         void InsertPaperOnAction(ActionEvent event) {
