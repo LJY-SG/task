@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="499.0" prefWidth="724.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.examination_system.www.controller.Teacher.ExamManageController">
+   <children>
+      <TableView fx:id="table" layoutY="75.0" prefHeight="339.0" prefWidth="724.0">
+        <columns>
+          <TableColumn fx:id="id" prefWidth="62.0" text="学号" />
+          <TableColumn fx:id="name" prefWidth="110.0" text="姓名" />
+            <TableColumn fx:id="time" prefWidth="126.0" text="考试时间" />
+            <TableColumn fx:id="address" prefWidth="115.0" text="考场" />
+            <TableColumn fx:id="subject" prefWidth="79.0" text="考试科目" />
+            <TableColumn fx:id="PaperName" prefWidth="127.0" text="考卷" />
+            <TableColumn fx:id="status" prefWidth="104.0" text="状态" />
+        </columns>
+      </TableView>
+      <Button fx:id="Enter" layoutX="60.0" layoutY="445.0" mnemonicParsing="false" onAction="#EnterOnAction" prefHeight="39.0" prefWidth="90.0" text="录入">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="ModifyExam" layoutX="224.0" layoutY="445.0" mnemonicParsing="false" onAction="#ModifyExamOnAction" prefHeight="39.0" prefWidth="90.0" text="修改">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="Exit" layoutX="560.0" layoutY="445.0" mnemonicParsing="false" onAction="#ExitOnAction" prefHeight="39.0" prefWidth="90.0" text="退出">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="CorrectPaper" layoutX="398.0" layoutY="445.0" mnemonicParsing="false" onAction="#CorrectPaperOnAction" prefHeight="39.0" prefWidth="90.0" text="改卷">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Label layoutX="279.0" layoutY="14.0" prefHeight="41.0" prefWidth="167.0" text="考试安排表">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

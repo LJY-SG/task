@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="434.0" prefWidth="498.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.examination_system.www.controller.Teacher.ModifyStudentController">
+    <children>
+        <Button fx:id="Sure" layoutX="107.0" layoutY="317.0" mnemonicParsing="false" onAction="#SureOnAction" prefHeight="64.0" prefWidth="104.0" text="确定">
+            <font>
+                <Font size="25.0" />
+            </font>
+        </Button>
+        <Button fx:id="Exit" layoutX="260.0" layoutY="317.0" mnemonicParsing="false" onAction="#ExitOnAction" prefHeight="64.0" prefWidth="104.0" text="取消">
+            <font>
+                <Font size="25.0" />
+            </font>
+        </Button>
+        <Label layoutX="107.0" layoutY="80.0" prefHeight="46.0" prefWidth="72.0" text="姓名:">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Label>
+        <TextField fx:id="Name" layoutX="179.0" layoutY="88.0" prefHeight="30.0" prefWidth="171.0" />
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="146.0" layoutY="14.0" prefHeight="48.0" prefWidth="213.0" text="学生信息">
+            <font>
+                <Font size="37.0" />
+            </font>
+        </Label>
+        <Label layoutX="107.0" layoutY="140.0" prefHeight="46.0" prefWidth="72.0" text="性别:">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Label>
+        <RadioButton fx:id="male" layoutX="178.0" layoutY="148.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="72.0" text="男">
+            <font>
+                <Font size="20.0" />
+            </font>
+            <toggleGroup>
+                <ToggleGroup fx:id="SexGroup" />
+            </toggleGroup>
+        </RadioButton>
+        <RadioButton fx:id="female" layoutX="276.0" layoutY="148.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="72.0" text="女" toggleGroup="$SexGroup">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </RadioButton>
+      <Label layoutX="107.0" layoutY="208.0" prefHeight="46.0" prefWidth="72.0" text="班级:">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="choiceClass" layoutX="178.0" layoutY="216.0" prefHeight="30.0" prefWidth="111.0" />
+      <Label fx:id="success" layoutX="146.0" layoutY="263.0" prefHeight="46.0" prefWidth="213.0" text="修改成功!" textFill="#f50505" visible="false">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="fail" layoutX="104.0" layoutY="263.0" prefHeight="46.0" prefWidth="260.0" text="修改失败!请将信息填写完整!" textFill="#f50505" visible="false">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="528.0" prefWidth="503.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.examination_system.www.controller.Student.ExamSituationController">
+   <children>
+      <Label layoutX="139.0" layoutY="81.0" prefHeight="43.0" prefWidth="101.0" text="考生姓名:">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="name" layoutX="250.0" layoutY="81.0" prefHeight="43.0" prefWidth="101.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="139.0" layoutY="132.0" prefHeight="43.0" prefWidth="101.0" text="考生学号:">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="id" layoutX="250.0" layoutY="132.0" prefHeight="43.0" prefWidth="101.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="139.0" layoutY="190.0" prefHeight="43.0" prefWidth="101.0" text="语文成绩:">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="chinese" layoutX="250.0" layoutY="190.0" prefHeight="43.0" prefWidth="101.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="139.0" layoutY="243.0" prefHeight="43.0" prefWidth="101.0" text="数学成绩:">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="math" layoutX="250.0" layoutY="243.0" prefHeight="43.0" prefWidth="101.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="139.0" layoutY="295.0" prefHeight="43.0" prefWidth="101.0" text="英语成绩:">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="english" layoutX="250.0" layoutY="295.0" prefHeight="43.0" prefWidth="101.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="139.0" layoutY="354.0" prefHeight="43.0" prefWidth="101.0" text="总分:">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="Sum" layoutX="250.0" layoutY="354.0" prefHeight="43.0" prefWidth="101.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Button fx:id="Return" layoutX="206.0" layoutY="441.0" mnemonicParsing="false" onAction="#ReturnOnAction" prefHeight="43.0" prefWidth="85.0" text="返回">
+         <font>
+            <Font size="25.0" />
+         </font></Button>
+   </children>
+</AnchorPane>

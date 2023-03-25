@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="301.0" prefWidth="395.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.examination_system.www.controller.Student.StudentController">
+   <children>
+      <Button fx:id="Information" layoutX="112.0" layoutY="30.0" mnemonicParsing="false" onAction="#InformationOnAction" prefHeight="46.0" prefWidth="156.0" text="个人信息">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Button>
+      <Button fx:id="ExamInfo" layoutX="112.0" layoutY="89.0" mnemonicParsing="false" onAction="#ExamInfoOnAction" prefHeight="46.0" prefWidth="156.0" text="考试信息">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Button>
+      <Button fx:id="ExamSituation" layoutX="112.0" layoutY="153.0" mnemonicParsing="false" onAction="#ExamSituationOnAction" prefHeight="46.0" prefWidth="156.0" text="查看考试情况">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Button>
+      <Button fx:id="Exit" layoutX="112.0" layoutY="216.0" mnemonicParsing="false" onAction="#ExitOnAction" prefHeight="46.0" prefWidth="156.0" text="退出">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

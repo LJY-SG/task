@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="393.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.examination_system.www.controller.Teacher.TeacherController">
+   <children>
+      <Button fx:id="Info" layoutX="130.0" layoutY="21.0" mnemonicParsing="false" onAction="#InfoOnAction" prefHeight="45.0" prefWidth="155.0" text="个人信息">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="ManageStudent" layoutX="130.0" layoutY="80.0" mnemonicParsing="false" onAction="#ManageStudentOnAction" prefHeight="45.0" prefWidth="155.0" text="学生信息管理">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="Bank" layoutX="130.0" layoutY="142.0" mnemonicParsing="false" onAction="#BankOnAction" prefHeight="45.0" prefWidth="155.0" text="试题库">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="PaperSource" layoutX="130.0" layoutY="200.0" mnemonicParsing="false" onAction="#PaperSourceOnAction" prefHeight="45.0" prefWidth="155.0" text="试卷库">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="ExamSituation" layoutX="130.0" layoutY="258.0" mnemonicParsing="false" onAction="#ExamSituationOnAction" prefHeight="45.0" prefWidth="155.0" text="考试情况">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="Exit" layoutX="130.0" layoutY="321.0" mnemonicParsing="false" onAction="#ExitOnAction" prefHeight="45.0" prefWidth="155.0" text="退出">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

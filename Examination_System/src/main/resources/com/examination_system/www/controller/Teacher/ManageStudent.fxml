@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="664.0" prefWidth="656.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.examination_system.www.controller.Teacher.ManageStudentController">
+   <children>
+      <TableView fx:id="table" layoutX="60.0" layoutY="89.0" prefHeight="467.0" prefWidth="537.0">
+        <columns>
+          <TableColumn fx:id="id" prefWidth="123.0" text="学号" />
+          <TableColumn fx:id="name" prefWidth="159.0" text="姓名" />
+            <TableColumn fx:id="sex" prefWidth="138.0" text="性别" />
+            <TableColumn fx:id="team" minWidth="0.0" prefWidth="115.0" text="班级" />
+        </columns>
+      </TableView>
+      <Label layoutX="245.0" layoutY="24.0" prefHeight="37.0" prefWidth="167.0" text="学生信息管理">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Button fx:id="ModifyStudent" layoutX="60.0" layoutY="595.0" mnemonicParsing="false" onAction="#ModifyStudentOnAction" prefHeight="37.0" prefWidth="83.0" text="修改">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="DeleteStudent" layoutX="183.0" layoutY="595.0" mnemonicParsing="false" onAction="#DeleteStudentOnAction" prefHeight="37.0" prefWidth="83.0" text="删除">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="Exit" layoutX="514.0" layoutY="595.0" mnemonicParsing="false" onAction="#ExitOnAction" prefHeight="37.0" prefWidth="83.0" text="退出">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="QueryExam" layoutX="318.0" layoutY="595.0" mnemonicParsing="false" onAction="#QueryExamOnAction" prefHeight="41.0" prefWidth="148.0" text="查看考试安排">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
