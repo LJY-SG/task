@@ -16,6 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class LoginController {
         @FXML
@@ -47,6 +48,9 @@ public class LoginController {
         @FXML
         private Label NoRegister;
 
+        @FXML
+        private Button ForgetPassWord;
+
         public static List<String> arr = new ArrayList<>();
 
         public void start(Stage stage) throws IOException {
@@ -74,7 +78,7 @@ public class LoginController {
     }
 
     @FXML
-    void LoginOnAction(ActionEvent event) throws SQLException, NoSuchAlgorithmException {
+    void LoginOnAction(ActionEvent event) throws SQLException, NoSuchAlgorithmException, InterruptedException {
         //设置分组
         student.setToggleGroup(StatusGroup);
         teacher.setToggleGroup(StatusGroup);
@@ -131,9 +135,52 @@ public class LoginController {
             }else {
                 //登录失败
                 fail.setVisible(true);
+                Platform.runLater(() -> {
+                    //获取按钮所在窗口
+                    Stage primaryStage = (Stage) Login.getScene().getWindow();
+                    //当前窗口隐藏
+                    primaryStage.hide();
+                    //加载目标窗口
+                    try{
+                        new LoginController().start(primaryStage);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                });
             }
         }else {
             NoRegister.setVisible(true);
+
+            Platform.runLater(() -> {
+                //获取按钮所在窗口
+                Stage primaryStage = (Stage) Login.getScene().getWindow();
+                //当前窗口隐藏
+                primaryStage.hide();
+                //加载目标窗口
+                try{
+                    new LoginController().start(primaryStage);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            });
         }
     }
+
+    @FXML
+    void ForgetPassWordOnAction(ActionEvent event) {
+        Platform.runLater(() -> {
+            //获取按钮所在窗口
+            Stage primaryStage = (Stage) ForgetPassWord.getScene().getWindow();
+            //当前窗口隐藏
+            primaryStage.hide();
+            //加载目标窗口
+            try{
+                new ForgetPassWordController().start(primaryStage);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        });
+    }
+
+
 }
